@@ -49,4 +49,4 @@ jobs:
 
       - name: Show coverage summary
         if: github.ref != 'refs/heads/develop'
-        run: deno coverage ./.coverage/
+        run: deno coverage
