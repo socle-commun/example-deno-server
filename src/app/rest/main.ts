@@ -1,24 +1,13 @@
 #!/usr/bin/env -S deno run --allow-read --allow-env --allow-write --allow-net
 
 import { OpenAPIHono } from 'npm:@hono/zod-openapi';
-import { SwaggerUI } from 'npm:@hono/swagger-ui'
+import { SwaggerUI } from 'npm:@hono/swagger-ui';
 import { SwaggerTheme, SwaggerThemeNameEnum } from "npm:swagger-themes";
-import getEnv, { $ENV } from '@/app/rest/env.ts'
-import { parse } from "https://deno.land/std@0.224.0/jsonc/mod.ts"
-import { join } from "https://deno.land/std@0.224.0/path/mod.ts"
-
-async function getProjectVersion(): Promise<string> {
-	const filePath = join(Deno.cwd(), 'deno.jsonc')
-	const fileContent = await Deno.readTextFile(filePath)
-	const jsoncData = parse(fileContent) as { version: string }
-
-	if (jsoncData && typeof jsoncData.version === 'string') {
-		return jsoncData.version
-	} else {
-		console.warn('⚠️ No "version" field found in deno.jsonc')
-		return 'unknown'
-	}
-}
+import getEnv, { $ENV } from '@/app/rest/env.ts';
+import { bearerAuthMiddleware } from '@/app/rest/middlewares/bearer-auth.ts';
+import { cors } from 'npm:hono/cors';
+import { getProjectVersion } from '@/ext/deno/util/get-project-version.ts'
+import { kvRateLimiter } from '@/app/rest/middlewares/kv-rate-limiter.ts';
 
 // Afficher un message d'initialisation
 console.log(`🚀 [${getEnv($ENV.APP_NAME, 'Unknown App')}] REST API is starting...`);
@@ -26,14 +15,42 @@ console.log(`🚀 [${getEnv($ENV.APP_NAME, 'Unknown App')}] REST API is starting
 const docPath = getEnv($ENV.DOC_PATH, '/doc') as string;
 const uiPath = getEnv($ENV.UI_PATH, '/ui') as string;
 const appName = getEnv($ENV.APP_NAME, 'Unknown App') as string;
+const isProd = getEnv($ENV.APP_ENV, 'production') === 'production'
 
 // Créer l'application Hono avec la prise en charge d'OpenAPI
 const app = new OpenAPIHono();
+if (isProd) {
+  app.use('*', cors({
+    origin: [getEnv($ENV.APP_URL) as string],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }))
 
-// Intégrer les routes
+  app.use('*', kvRateLimiter({
+    max: 100, // Limite de 100 requêtes par minute
+    windowMs: 60 * 1000, // Fenêtre de temps de 1 minute
+  }) as any)
+
+  app.use("*", (await import('./middlewares/security-headers.ts')).default as any)
+}
+
+app.use('*', bearerAuthMiddleware)
+
+app.onError((err, c) => {
+  console.error(err)
+
+  return c.json(
+    { error: isProd ? 'Internal Server Error' : err.stack },
+    500
+  )
+})
+
+//☄️todo: Intégrer les routes
+//   Pour chaque dossier dans le dossier "domains"
+//   Rajoute un tag représentant le domaine / Nom de dossier
+//   Lance la fonction par défaut du mod pour chargement des routes.
+
 
 // ajout du swagger-ui
-
 const theme = new SwaggerTheme();
 const themeContent = theme.getBuffer(SwaggerThemeNameEnum.DARK);
 

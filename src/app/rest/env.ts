@@ -34,4 +34,6 @@ export enum $ENV {
     APP_PORT = "APP_PORT",
     DOC_PATH = "DOC_PATH",
     UI_PATH = "UI_PATH",
+    BEARER_TOKEN = "BEARER_TOKEN",
+    APP_URL= "APP_URL",
 }

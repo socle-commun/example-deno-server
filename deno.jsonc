@@ -7,8 +7,8 @@
 
   // 🚀 Tasks Deno disponibles (via `deno task <name>`)
   "tasks": {
-    "dev": "deno serve --allow-all ./src/app/rest/main.ts",                   // Lancer en mode dev
-    "serve": "deno serve --allow-all ./src/app/rest/main.ts",              // Serveur avec deno serve
+    "dev": "deno serve --unstable-kv --allow-all ./src/app/rest/main.ts",                   // Lancer en mode dev
+    "serve": "deno serve --unstable-kv --allow-all ./src/app/rest/main.ts",              // Serveur avec deno serve
     "test:dev": "deno test --allow-all --watch",                           // Tests avec watch en dev
     "test:dev:coverage": "deno test --allow-all --coverage && deno coverage", // Tests + couverture en local
     "test:ci": "deno test --allow-all --reporter=junit --junit-path=./.dist/report.xml --coverage" // CI: tests + rapport JUnit + couverture
