@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  validate:
+    name: Validate (lint + test)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Lint code
+        run: deno lint
+
+      - name: Run tests (CI)
+        run: deno task test:ci
+
+      - name: Upload JUnit Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-report
+          path: ./.dist/report.xml
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./.coverage/
