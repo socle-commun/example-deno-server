@@ -1,30 +1,44 @@
 import { OpenAPIHono } from 'npm:@hono/zod-openapi';
 import { SwaggerTheme, SwaggerThemeNameEnum } from "npm:swagger-themes";
-import getEnv, { $ENV } from '@/app/rest/env.ts';
+import getEnv from '@/ext/deno/env/mod.ts';
 import { bearerAuthMiddleware } from '@/app/rest/middlewares/bearer-auth.ts';
 import { cors } from 'npm:hono/cors';
 import { getProjectVersion } from '@/ext/deno/util/get-project-version.ts'
 import { kvRateLimiter } from '@/app/rest/middlewares/kv-rate-limiter.ts';
 import { defaultOptions } from './default-options.ts'
 import { $AppRestOptions } from './types.ts'
+import { join } from 'https://deno.land/std@0.224.0/path/join.ts'
 
-export default async function $AppRest(__entryDir: string, options: Partial<$AppRestOptions> = defaultOptions) {
+export type $ENV  =
+    "APP_NAME" |
+    "ENV" |
+    "APP_PORT"|
+    "DOC_PATH" |
+    "UI_PATH" |
+    "BEARER_TOKEN" |
+    "APP_URL" 
+
+export default async function $AppRest(__entryDir: string = join(Deno.cwd(), "src/app/rest"), options: Partial<$AppRestOptions> = defaultOptions) {
     //📌 Merge des options par défaut si seulement une partie des options est définie
     const opts: $AppRestOptions = { ...options, ...defaultOptions }
-    // Afficher un message d'initialisation
-    const docPath = getEnv($ENV.DOC_PATH, opts.docPath) as string;
-    const uiPath = getEnv($ENV.UI_PATH, opts.uiPath) as string;
-    const appName = getEnv($ENV.APP_NAME, opts.appName) as string;
-    const isProd = getEnv($ENV.APP_ENV, opts.defaultEnv) === 'production'
+
+    //📌 Chargement des variables d'environnement
+    const docPath = getEnv<$ENV>("DOC_PATH", opts.docPath) as string;
+    const uiPath = getEnv<$ENV>("UI_PATH", opts.uiPath) as string;
+    const appName = getEnv<$ENV>("APP_NAME", opts.appName) as string;
+    const isProd = getEnv<$ENV>("ENV", opts.defaultEnv) === 'production'
+    const appUrl = getEnv<$ENV>("APP_URL") as string;
     const version = await getProjectVersion()
 
+    //📌 Afficher un message d'initialisation
     console.log(`🚀 [${appName}] REST API is starting...`);
 
-    // Créer l'application Hono avec la prise en charge d'OpenAPI
+    //📌 Créer l'application Hono avec la prise en charge d'OpenAPI
+    //☄️todo: Lancement de l'application Hono sans la prise en charge d'openApi pour économiser les ressources au maximum
     const app = new OpenAPIHono();
     if (isProd) {
         app.use('*', cors({
-            origin: [getEnv($ENV.APP_URL) as string],
+            origin: [appUrl],
             allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
         }))
 

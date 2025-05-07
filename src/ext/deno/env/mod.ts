@@ -24,16 +24,6 @@ try {
  * @param defaultValue Valeur par défaut (optionnelle)
  * @returns La valeur trouvée ou defaultValue
  */
-export default function getEnv(key: $ENV, defaultValue?: string): string | undefined {
+export default function getEnv<T extends string>(key: T, defaultValue?: string): string | undefined {
 	return env[key] || Deno.env.get(key) || defaultValue
-}
-
-export enum $ENV {
-    APP_NAME = "APP_NAME",
-    APP_ENV = "ENV",
-    APP_PORT = "APP_PORT",
-    DOC_PATH = "DOC_PATH",
-    UI_PATH = "UI_PATH",
-    BEARER_TOKEN = "BEARER_TOKEN",
-    APP_URL= "APP_URL",
 }
