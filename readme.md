@@ -101,6 +101,60 @@ Pour adapter ce template à votre projet :
 
 ---
 
+## 🌿 Configuration des variables d’environnement
+
+Le projet utilise un fichier `.env` local pour configurer les valeurs sensibles et adaptables.
+Cela permet de changer facilement de configuration entre le développement local, la CI, et la production.
+
+---
+
+### 📄 Fichier `.env`
+
+Exemple :
+
+```
+PORT=8000
+NODE_ENV=development
+API_KEY=your-api-key-here
+```
+
+➡ **Astuce :** Un fichier modèle est fourni sous le nom `.env.example`.
+Pour l’utiliser :
+
+```bash
+cp .env.example .env
+```
+
+---
+
+### 🔍 Priorité de chargement
+
+L’application charge les variables dans cet ordre :
+1️⃣ Valeurs définies dans le fichier `.env` (local)
+2️⃣ Valeurs définies dans l’environnement système (`Deno.env`)
+3️⃣ Valeurs par défaut (quand prévues dans le code, ex. port `8000`)
+
+---
+
+### 🔑 Variables clés utilisées
+
+| Variable   | Description                                     | Par défaut    |
+| ---------- | ----------------------------------------------- | ------------- |
+| `PORT`     | Port d’écoute du serveur                        | `8000`        |
+| `NODE_ENV` | Mode d’exécution (`development` / `production`) | `development` |
+| `API_KEY`  | Clé API privée ou publique (selon les besoins)  | *(aucune)*    |
+
+---
+
+### 🛠️ Bonnes pratiques
+
+✅ Ne jamais versionner le fichier `.env` réel → il doit être dans `.gitignore`
+✅ Utiliser `.env.example` comme modèle pour documenter les variables attendues
+✅ Passer les variables nécessaires dans l’environnement CI/CD si `.env` n’est pas présent
+✅ Lire les variables via le helper `getEnv()` au lieu d’utiliser directement `Deno.env.get()` (permet compatibilité locale/CI)
+
+---
+
 ## 📚 Ressources utiles
 
 * 📖 [Documentation Deno](https://deno.land/manual)

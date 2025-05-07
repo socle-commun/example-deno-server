@@ -3,38 +3,60 @@
 import { OpenAPIHono } from 'npm:@hono/zod-openapi';
 import { SwaggerUI } from 'npm:@hono/swagger-ui'
 import { SwaggerTheme, SwaggerThemeNameEnum } from "npm:swagger-themes";
+import getEnv, { $ENV } from '@/app/rest/env.ts'
+import { parse } from "https://deno.land/std@0.224.0/jsonc/mod.ts"
+import { join } from "https://deno.land/std@0.224.0/path/mod.ts"
+
+async function getProjectVersion(): Promise<string> {
+	const filePath = join(Deno.cwd(), 'deno.jsonc')
+	const fileContent = await Deno.readTextFile(filePath)
+	const jsoncData = parse(fileContent) as { version: string }
+
+	if (jsoncData && typeof jsoncData.version === 'string') {
+		return jsoncData.version
+	} else {
+		console.warn('⚠️ No "version" field found in deno.jsonc')
+		return 'unknown'
+	}
+}
 
 // Afficher un message d'initialisation
-console.log("🚀 Comet REST API is starting...");
+console.log(`🚀 [${getEnv($ENV.APP_NAME, 'Unknown App')}] REST API is starting...`);
+
+const docPath = getEnv($ENV.DOC_PATH, '/doc') as string;
+const uiPath = getEnv($ENV.UI_PATH, '/ui') as string;
+const appName = getEnv($ENV.APP_NAME, 'Unknown App') as string;
 
 // Créer l'application Hono avec la prise en charge d'OpenAPI
 const app = new OpenAPIHono();
 
-// Intégrer la route dans l'application
+// Intégrer les routes
+
+// ajout du swagger-ui
 
 const theme = new SwaggerTheme();
 const themeContent = theme.getBuffer(SwaggerThemeNameEnum.DARK);
 
 // Documentation OpenAPI disponible à /doc
-app.doc('/doc', {
+app.doc(docPath, {
   openapi: '3.0.0',
   info: {
-    version: '0.0.0-beta-0',
-    title: 'Comet API Docs',
+    version: await getProjectVersion(),
+    title: `${appName} API Docs`,
   },
   tags: [
-    { name: "🛣️ Commands", description: "💨" },
+    //☄️todo: Gestion des tags
   ],
 });
-app.get('/ui', (c) => {
+app.get(uiPath, (c) => {
   return c.html(`
     <html lang="en">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Comet API Doc" />
+        <meta name="description" content="${appName} API Doc" />
         <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBhcmlhLWhpZGRlbj0idHJ1ZSIgcm9sZT0iaW1nIgoJcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCIgdmlld0JveD0iMCAwIDIwMCAyMDAiPgoJPGRlZnM+CgkJPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAlIiB4Mj0iNzUlIiB5MT0iMCUiIHkyPSI3NSUiPgoJCQk8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkYwMDY2Ij48L3N0b3A+CgkJCTxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0JEMzRGRSI+PC9zdG9wPgoJCTwvbGluZWFyR3JhZGllbnQ+Cgk8L2RlZnM+Cgk8cGF0aCBmaWxsPSJ1cmwoI2dyYWRpZW50KSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDEwMCkiPgoJCTxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImQiCgkJCXZhbHVlcz0iTTYwLjEsLTUwLjZDNzIuNywtMzIuMSw3NC4yLC03LjQsNjYsOS43QzU3LjksMjYuOCw0MCwzNi4zLDIzLDQyLjVDNiw0OC43LC0xMC4xLDUxLjUsLTI2LjEsNDYuNkMtNDIuMiw0MS44LC01OC4yLDI5LjQsLTYxLjUsMTQuMkMtNjQuOCwtMC45LC01NS40LC0xOC44LC00MywtMzcuM0MtMzAuNiwtNTUuOCwtMTUuMywtNzQuOSw0LjIsLTc4LjJDMjMuNywtODEuNiw0Ny40LC02OS4yLDYwLjEsLTUwLjZaOwogICAgICAgICAgICBNNTAuMiwtMzguN0M2My4xLC0yNCw3MCwtMy4yLDY3LjksMTkuMkM2NS43LDQxLjYsNTQuNCw2NS42LDM2LjMsNzMuOEMxOC4xLDgxLjksLTYuOSw3NC4yLC0yNyw2Mi4yQy00Ny4xLDUwLjIsLTYyLjIsMzMuOSwtNjUuNSwxNkMtNjguNywtMiwtNjAuMiwtMjEuNiwtNDcuNCwtMzYuNEMtMzQuNSwtNTEuMiwtMTcuMiwtNjEuMSwwLjcsLTYxLjdDMTguNywtNjIuMywzNy40LC01My41LDUwLjIsLTM4LjdaOwogICAgICAgICAgICBNNjUuOSwtNTAuNUM4MC43LC0zNC4xLDg0LjYsLTcsNzUuNSwxMUM2Ni40LDI5LDQ0LjQsMzcuNywyMyw0OC4yQzEuNiw1OC42LC0xOS4xLDcwLjcsLTMxLjIsNjQuOUMtNDMuNCw1OSwtNDYuOSwzNS4zLC00OSwxNC41Qy01MS4yLC02LjMsLTUxLjksLTI0LjIsLTQzLjUsLTM5LjFDLTM1LjEsLTU0LjEsLTE3LjYsLTY2LjEsNCwtNjkuM0MyNS42LC03Mi42LDUxLjIsLTY2LjksNjUuOSwtNTAuNVo7CiAgICAgICAgICAgIE01Mi4zLC00Mi4zQzYyLjEsLTI5LjQsNjAuNiwtOCw1Ni4xLDEzLjNDNTEuNywzNC42LDQ0LjQsNTUuOCwzMCw2Mi45QzE1LjcsNzAsLTUuNiw2MywtMjIuMSw1Mi41Qy0zOC42LDQyLC01MC4zLDI4LjEsLTU2LDEwLjZDLTYxLjgsLTYuOCwtNjEuNSwtMjcuOCwtNTEuMSwtNDAuOUMtNDAuOCwtNTQsLTIwLjQsLTU5LjEsMC40LC01OS41QzIxLjIsLTU5LjgsNDIuNSwtNTUuMyw1Mi4zLC00Mi4zWjsKICAgICAgICAgICAgTTYwLjEsLTUwLjZDNzIuNywtMzIuMSw3NC4yLC03LjQsNjYsOS43QzU3LjksMjYuOCw0MCwzNi4zLDIzLDQyLjVDNiw0OC43LC0xMC4xLDUxLjUsLTI2LjEsNDYuNkMtNDIuMiw0MS44LC01OC4yLDI5LjQsLTYxLjUsMTQuMkMtNjQuOCwtMC45LC01NS40LC0xOC44LC00MywtMzcuM0MtMzAuNiwtNTUuOCwtMTUuMywtNzQuOSw0LjIsLTc4LjJDMjMuNywtODEuNiw0Ny40LC02OS4yLDYwLjEsLTUwLjZaIgoJCQlkdXI9IjEwcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiIC8+Cgk8L3BhdGg+Cjwvc3ZnPg==" />
-        <title>🚀 Comet API Docs</title>
+        <title>🚀 ${appName} API Docs</title>
         <script>
         </script>
         <style>
@@ -66,7 +88,7 @@ app.get('/ui', (c) => {
         <div style="text-align:center; margin-top:20px;">
             <img width="200px" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBhcmlhLWhpZGRlbj0idHJ1ZSIgcm9sZT0iaW1nIgoJcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCIgdmlld0JveD0iMCAwIDIwMCAyMDAiPgoJPGRlZnM+CgkJPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAlIiB4Mj0iNzUlIiB5MT0iMCUiIHkyPSI3NSUiPgoJCQk8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkYwMDY2Ij48L3N0b3A+CgkJCTxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0JEMzRGRSI+PC9zdG9wPgoJCTwvbGluZWFyR3JhZGllbnQ+Cgk8L2RlZnM+Cgk8cGF0aCBmaWxsPSJ1cmwoI2dyYWRpZW50KSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDEwMCkiPgoJCTxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImQiCgkJCXZhbHVlcz0iTTYwLjEsLTUwLjZDNzIuNywtMzIuMSw3NC4yLC03LjQsNjYsOS43QzU3LjksMjYuOCw0MCwzNi4zLDIzLDQyLjVDNiw0OC43LC0xMC4xLDUxLjUsLTI2LjEsNDYuNkMtNDIuMiw0MS44LC01OC4yLDI5LjQsLTYxLjUsMTQuMkMtNjQuOCwtMC45LC01NS40LC0xOC44LC00MywtMzcuM0MtMzAuNiwtNTUuOCwtMTUuMywtNzQuOSw0LjIsLTc4LjJDMjMuNywtODEuNiw0Ny40LC02OS4yLDYwLjEsLTUwLjZaOwogICAgICAgICAgICBNNTAuMiwtMzguN0M2My4xLC0yNCw3MCwtMy4yLDY3LjksMTkuMkM2NS43LDQxLjYsNTQuNCw2NS42LDM2LjMsNzMuOEMxOC4xLDgxLjksLTYuOSw3NC4yLC0yNyw2Mi4yQy00Ny4xLDUwLjIsLTYyLjIsMzMuOSwtNjUuNSwxNkMtNjguNywtMiwtNjAuMiwtMjEuNiwtNDcuNCwtMzYuNEMtMzQuNSwtNTEuMiwtMTcuMiwtNjEuMSwwLjcsLTYxLjdDMTguNywtNjIuMywzNy40LC01My41LDUwLjIsLTM4LjdaOwogICAgICAgICAgICBNNjUuOSwtNTAuNUM4MC43LC0zNC4xLDg0LjYsLTcsNzUuNSwxMUM2Ni40LDI5LDQ0LjQsMzcuNywyMyw0OC4yQzEuNiw1OC42LC0xOS4xLDcwLjcsLTMxLjIsNjQuOUMtNDMuNCw1OSwtNDYuOSwzNS4zLC00OSwxNC41Qy01MS4yLC02LjMsLTUxLjksLTI0LjIsLTQzLjUsLTM5LjFDLTM1LjEsLTU0LjEsLTE3LjYsLTY2LjEsNCwtNjkuM0MyNS42LC03Mi42LDUxLjIsLTY2LjksNjUuOSwtNTAuNVo7CiAgICAgICAgICAgIE01Mi4zLC00Mi4zQzYyLjEsLTI5LjQsNjAuNiwtOCw1Ni4xLDEzLjNDNTEuNywzNC42LDQ0LjQsNTUuOCwzMCw2Mi45QzE1LjcsNzAsLTUuNiw2MywtMjIuMSw1Mi41Qy0zOC42LDQyLC01MC4zLDI4LjEsLTU2LDEwLjZDLTYxLjgsLTYuOCwtNjEuNSwtMjcuOCwtNTEuMSwtNDAuOUMtNDAuOCwtNTQsLTIwLjQsLTU5LjEsMC40LC01OS41QzIxLjIsLTU5LjgsNDIuNSwtNTUuMyw1Mi4zLC00Mi4zWjsKICAgICAgICAgICAgTTYwLjEsLTUwLjZDNzIuNywtMzIuMSw3NC4yLC03LjQsNjYsOS43QzU3LjksMjYuOCw0MCwzNi4zLDIzLDQyLjVDNiw0OC43LC0xMC4xLDUxLjUsLTI2LjEsNDYuNkMtNDIuMiw0MS44LC01OC4yLDI5LjQsLTYxLjUsMTQuMkMtNjQuOCwtMC45LC01NS40LC0xOC44LC00MywtMzcuM0MtMzAuNiwtNTUuOCwtMTUuMywtNzQuOSw0LjIsLTc4LjJDMjMuNywtODEuNiw0Ny40LC02OS4yLDYwLjEsLTUwLjZaIgoJCQlkdXI9IjEwcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiIC8+Cgk8L3BhdGg+Cjwvc3ZnPg==" />
         </div>
-        ${SwaggerUI({ url: '/doc' })}
+        ${SwaggerUI({ url: docPath })}
     </body>
     </html>
   `)
