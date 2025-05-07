@@ -7,6 +7,8 @@
 
   // 🚀 Tasks Deno disponibles (via `deno task <name>`)
   "tasks": {
+    "docs:dev": "npx vitepress dev docs",
+    "docs:build": "npx vitepress build docs",
     "dev": "deno serve --unstable-kv --allow-all ./src/app/rest/main.ts",                   // Lancer en mode dev
     "serve": "deno serve --unstable-kv --allow-all ./src/app/rest/main.ts",              // Serveur avec deno serve
     "test:dev": "deno test --unstable-kv --allow-all --watch",                           // Tests avec watch en dev

@@ -1,17 +1,18 @@
 # 🌐 example-deno-server
 
-Un **template minimaliste** pour démarrer un projet **Deno REST API** moderne.
-Forkez ce dépôt pour créer rapidement votre propre serveur Deno extensible, typé, et prêt pour le déploiement.
+Un **template Deno REST API minimaliste** conçu pour démarrer rapidement un projet moderne, typé, sécurisé et extensible.
 
 ---
 
-## 🚀 Pourquoi utiliser ce projet ?
+## 🚀 Pourquoi utiliser ce projet ?
 
 ✅ Serveur REST Deno prêt à l’emploi
-✅ Architecture simple et modulaire (extensible)
-✅ Commandes dev, tests, formatage, CI intégrées
-✅ Workflow GitHub Actions pour déploiement automatique sur Deno Deploy
-✅ Code typé TypeScript, avec import maps propres
+✅ Architecture modulaire, simple à étendre
+✅ Sécurité intégrée (auth, rate limit, headers)
+✅ Documentation OpenAPI/Swagger intégrée
+✅ Code propre et typé TypeScript
+✅ Déploiement automatique via Deno Deploy (GitHub Actions)
+✅ Gestion simple des environnements `.env`
 
 ---
 
@@ -19,17 +20,22 @@ Forkez ce dépôt pour créer rapidement votre propre serveur Deno extensible, t
 
 ```
 .
-├── .github/workflows/deploy.yml  # Workflow GitHub Actions pour déploiement sur release
-├── .gitignore                    # Exclusions Git
-├── ai.md                         # Notes IA (optionnel, exemple Comet)
-├── deno.jsonc                    # Config Deno : tasks, lint, fmt, tests
-├── import-map.json               # Mapping des imports
-├── readme.md                     # Documentation principale
-├── tsconfig.json                 # Options TypeScript
-└── src/
-    └── app/
-        └── rest/
-            └── main.ts           # Point d’entrée du serveur REST
+├── .github/workflows/         # Workflows CI/CD
+├── deno.jsonc                 # Config Deno (tasks, lint, etc.)
+├── import-map.json            # Mapping des imports
+├── tsconfig.json              # Config TypeScript
+├── readme.md                  # Documentation principale
+├── .env.example               # Exemple d’environnement local
+├── src/
+│   ├── app/
+│   │   └── rest/
+│   │       ├── main.ts        # Entrée principale REST API
+│   │       ├── env.ts         # Gestion des variables d’environnement
+│   │       └── middlewares/   # Middlewares : auth, sécurité, rate limit
+│   └── ext/
+│       └── deno/              # Utilitaires KV, outils internes
+└── tests/
+    └── e2e/                   # Tests end-to-end
 ```
 
 ---
@@ -37,30 +43,35 @@ Forkez ce dépôt pour créer rapidement votre propre serveur Deno extensible, t
 ## ⚙️ Prérequis
 
 * **Deno ≥ 2.2.8** → [Installer Deno](https://deno.land/manual/getting_started/installation)
-* Git → pour cloner et gérer votre fork
-* Un éditeur recommandé : VS Code + extension officielle Deno
+* Git (pour cloner et versionner)
+* **VS Code** recommandé avec l’extension officielle Deno
 
 ---
 
-## 🔨 Cloner et démarrer un nouveau projet
+## 🔨 Mise en route
 
-1️⃣ **Forker ce dépôt**
-Cliquez sur **Fork** sur GitHub pour créer votre copie.
-
-2️⃣ **Cloner votre fork localement**
+1️⃣ **Cloner le projet**
 
 ```bash
-git clone git@github.com:<votre-utilisateur>/<votre-repo>.git
-cd <votre-repo>
+git clone git@github.com:socle-commun/example-deno-server.git
+cd example-deno-server
 ```
 
-3️⃣ **Lancer le serveur**
+2️⃣ **Configurer l’environnement local**
+
+```bash
+cp .env.example .env
+```
+
+3️⃣ **Lancer le serveur en local**
 
 ```bash
 deno task dev
 ```
 
-Accédez à votre API sur [http://localhost:8000](http://localhost:8000).
+Accès local → [http://localhost:8000](http://localhost:8000)
+Swagger UI → [http://localhost:8000/ui](http://localhost:8000/ui)
+OpenAPI JSON → [http://localhost:8000/doc](http://localhost:8000/doc)
 
 ---
 
@@ -69,108 +80,96 @@ Accédez à votre API sur [http://localhost:8000](http://localhost:8000).
 | Commande                      | Description                              |
 | ----------------------------- | ---------------------------------------- |
 | `deno task dev`               | Lancer l’API REST en local               |
-| `deno task serve`             | Utiliser `deno serve` pour démarrer      |
+| `deno task serve`             | Démarrage rapide via `deno serve`        |
 | `deno task test:dev`          | Lancer les tests en mode watch           |
 | `deno task test:dev:coverage` | Générer un rapport de couverture         |
-| `deno task test:ci`           | Lancer les tests + rapport JUnit pour CI |
-| `deno fmt`                    | Formater le code                         |
+| `deno task test:ci`           | Exécuter les tests CI avec rapport JUnit |
+| `deno fmt`                    | Formatter le code                        |
 | `deno lint`                   | Vérifier les problèmes de lint           |
 | `deno check`                  | Vérifier les types TypeScript            |
 
 ---
 
-## 🚀 Déploiement automatique (Deno Deploy)
+## 🌱 Gestion de l’environnement
 
-✅ Le projet inclut un workflow GitHub Actions (`.github/workflows/deploy.yml`)
-✅ Déclenchement automatique **uniquement** lors d’une publication de release (`published`)
-✅ Nécessite d’avoir configuré un projet Deno Deploy avec le bon `project` name
+Les variables sont chargées avec la priorité suivante :
+`.env` local → `Deno.env` système → valeur par défaut dans le code
 
-Pour déployer :
+| Variable      | Description                       |
+| ------------- | --------------------------------- |
+| APP\_NAME     | Nom de l’application              |
+| APP\_ENV      | `development` ou `production`     |
+| APP\_PORT     | Port d’écoute                     |
+| APP\_URL      | URL complète pour les CORS        |
+| DOC\_PATH     | Chemin de la doc OpenAPI (`/doc`) |
+| UI\_PATH      | Chemin Swagger UI (`/ui`)         |
+| BEARER\_TOKEN | Token d’authentification global   |
 
-* Publiez une nouvelle release sur GitHub → le code sera automatiquement uploadé vers Deno Deploy.
-
----
-
-## 🌱 Personnalisation rapide
-
-Pour adapter ce template à votre projet :
-1️⃣ Changez le nom du projet dans `deno.jsonc` et `deploy.yml` (`project: "<votre_nom_de_projet>"`).
-2️⃣ Ajoutez vos propres routes sous `src/app/rest/`.
-3️⃣ Ajoutez vos dépendances dans `import-map.json`.
-4️⃣ Activez la CI selon vos besoins (tests, lint, etc.).
+➡ Voir `.env.example` pour un modèle prêt à l’emploi.
 
 ---
 
-## 🌿 Configuration des variables d’environnement
+## 🔒 Sécurité intégrée
 
-Le projet utilise un fichier `.env` local pour configurer les valeurs sensibles et adaptables.
-Cela permet de changer facilement de configuration entre le développement local, la CI, et la production.
+✅ Authentification **Bearer**
+✅ Headers de sécurité (XSS, nosniff, HSTS, etc.)
+✅ Rate limiter via **Deno KV**
+✅ CORS configuré dynamiquement
+
+> 📂 Tous les middlewares sont documentés séparément sous `docs/features/` :
+>
+> * `bearer-auth.md`
+> * `security-headers.md`
+> * `kv-rate-limiter.md`
+> * `cors.md`
 
 ---
 
-### 📄 Fichier `.env`
+## 📚 Documentation et Swagger UI
 
-Exemple :
+La documentation OpenAPI est générée automatiquement grâce à **@hono/zod-openapi**.
 
-```
-PORT=8000
-NODE_ENV=development
-API_KEY=your-api-key-here
-```
+* JSON brut → `/doc`
+* Interface interactive (Swagger UI) → `/ui`
 
-➡ **Astuce :** Un fichier modèle est fourni sous le nom `.env.example`.
-Pour l’utiliser :
+---
+
+## 🚀 Déploiement (Deno Deploy)
+
+Un workflow GitHub Actions (`.github/workflows/deploy.yml`) assure :
+✅ Déploiement automatique lors de la publication d’une **release GitHub**
+✅ Mise à jour instantanée sur **Deno Deploy**
+
+➡ Assurez-vous de configurer les secrets et le nom du projet dans votre espace Deno Deploy.
+
+---
+
+## 🧪 Tests
+
+Les tests E2E (`tests/e2e/`) vérifient :
+✅ Les codes de réponse des routes principales
+✅ L’état correct du serveur (start/stop) en local
+
+Exécution des tests :
 
 ```bash
-cp .env.example .env
+deno task test:dev
 ```
 
 ---
 
-### 🔍 Priorité de chargement
+## 🌟 Contributions
 
-L’application charge les variables dans cet ordre :
-1️⃣ Valeurs définies dans le fichier `.env` (local)
-2️⃣ Valeurs définies dans l’environnement système (`Deno.env`)
-3️⃣ Valeurs par défaut (quand prévues dans le code, ex. port `8000`)
-
----
-
-### 🔑 Variables clés utilisées
-
-| Variable   | Description                                     | Par défaut    |
-| ---------- | ----------------------------------------------- | ------------- |
-| `PORT`     | Port d’écoute du serveur                        | `8000`        |
-| `NODE_ENV` | Mode d’exécution (`development` / `production`) | `development` |
-| `API_KEY`  | Clé API privée ou publique (selon les besoins)  | *(aucune)*    |
-
----
-
-### 🛠️ Bonnes pratiques
-
-✅ Ne jamais versionner le fichier `.env` réel → il doit être dans `.gitignore`
-✅ Utiliser `.env.example` comme modèle pour documenter les variables attendues
-✅ Passer les variables nécessaires dans l’environnement CI/CD si `.env` n’est pas présent
-✅ Lire les variables via le helper `getEnv()` au lieu d’utiliser directement `Deno.env.get()` (permet compatibilité locale/CI)
-
----
-
-## 📚 Ressources utiles
-
-* 📖 [Documentation Deno](https://deno.land/manual)
-* 🔗 [Modules tiers Deno (x)](https://deno.land/x)
-* 🛠️ [Deno Deploy](https://deno.com/deploy)
-
----
-
-## 👤 Auteur original
-
-* **Nom** : Mistifiou
-* **Email** : [mistifiou@yahoo.fr](mailto:mistifiou@yahoo.fr)
-* **Repo source** : [socle-commun/example-deno-server](https://github.com/socle-commun/example-deno-server)
+✅ Forkez le projet
+✅ Créez une branche pour vos modifications
+✅ Ouvrez une **pull request** détaillée
 
 ---
 
 ## 🏷️ Licence
 
-MIT © Mistifiou
+MIT © Socle-Commun
+
+---
+
+📂 **Note :** Toute nouvelle feature doit être documentée sous `docs/features/`.
