@@ -34,7 +34,7 @@
 
   // 🧪 Configuration des tests
   "test": {
-    "include": ["tests/"],                                                 // Inclut le dossier tests
+    "include": ["tests/", "src/**/*.test.ts"],                              // Inclut le dossier tests et les tests dans src
     "exclude": ["src/testdata/", "src/fixtures/**/*.ts"]                   // Ignore les données de test et fixtures
   },
 

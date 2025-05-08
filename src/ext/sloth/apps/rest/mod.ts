@@ -11,14 +11,14 @@ import { $Import } from 'https://deno.land/x/sloth_import@1.1.0/mod.ts'
 import { Domain } from '@/ext/sloth/apps/rest/domain-factory.ts'
 import { MiddlewareHandler } from 'https://deno.land/x/hono@v4.3.7/types.ts'
 
-export type ENV  =
+export type ENV =
     "APP_NAME" |
     "ENV" |
-    "APP_PORT"|
+    "APP_PORT" |
     "DOC_PATH" |
     "UI_PATH" |
     "BEARER_TOKEN" |
-    "APP_URL" 
+    "APP_URL"
 
 export default async function $AppRest(__entryDir: string, options: Partial<$AppRestOptions> = defaultOptions) {
     //📌 Merge des options par défaut si seulement une partie des options est définie
@@ -69,10 +69,10 @@ export default async function $AppRest(__entryDir: string, options: Partial<$App
     $Import.config.logging = true
     $Import.config.entryFileName = 'mod.ts'
     await $Import(__entryDir, ['./domains/'], {
-        callback: (mod: { default: (app: OpenAPIHono) => Promise<Domain>}) => {
+        callback: (mod: { default: () => Promise<Domain> }) => {
             return new Promise((resolve, reject) => {
                 try {
-                    domainsPromises.push(mod.default(app))
+                    domainsPromises.push(mod.default())
                     resolve()
                 } catch (error) {
                     reject(error)
@@ -82,12 +82,27 @@ export default async function $AppRest(__entryDir: string, options: Partial<$App
     });
     const domains = await Promise.all(domainsPromises)
 
-    domains.forEach((domain: Domain) => {
+    await Promise.all(domains.map(async (domain: Domain) => {
+        //📌 Pour chaque domaine, on importe son dossier "routes"
+        await $Import(domain.path, ['./routes/'], {
+            callback: (mod: { default: (domain: Domain) => Promise<void> }) => {
+                return new Promise((resolve, reject) => {
+                    try {
+                        // La route se charge seule via le domaine
+                        mod.default(domain)
+                        resolve()
+                    } catch (error) {
+                        reject(error)
+                    }
+                })
+            }
+        })
         domain.routes.forEach((route) => {
+            console.log(`📜 [${route.domain.name}] ${route.method.toUpperCase()} (${route.path})`)
             // deno-lint-ignore no-explicit-any
             app.openapi(route.schema, route.handler as any)
         })
-    })
+    }))
 
     // ajout du swagger-ui
     const theme = new SwaggerTheme();
@@ -100,7 +115,7 @@ export default async function $AppRest(__entryDir: string, options: Partial<$App
             version,
             title: `${appName} API Docs`,
         },
-        tags: domains.map((domain) => domain),
+        tags: domains.map((domain) => ({ name: domain.name })),
     });
     app.get(uiPath, (c) => {
         return c.html(opts.uiHtmlFactory(themeContent, docPath, appName, version))

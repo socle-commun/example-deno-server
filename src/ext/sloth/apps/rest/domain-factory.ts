@@ -5,14 +5,16 @@ import { Context } from 'https://deno.land/x/hono@v4.3.7/context.ts'
 
 export class Domain {
     name: string;
+    path: string;
     routes: Route[] = [];
 
-    constructor(name: string) {
+    constructor(name: string, path: string) {
         this.name = name;
+        this.path = path;
     }
 
     addRoute(method: 'get' | 'post' | 'put' | 'delete', path: string, handler: (c: Context) => unknown) {
-        const route = new Route(method, path, handler, [{name: this.name}]);
+        const route = new Route(method, path, handler, [{name: this.name}], this);
         this.routes.push(route);
         return route;
     }
@@ -26,7 +28,7 @@ export class Route {
     // deno-lint-ignore no-explicit-any
     responses: Record<number, any> = {};
 
-    constructor(method: 'get' | 'post' | 'put' | 'delete', path: string, handler: (c: Context) => unknown, tags: {name: string, description?: string}[]) {
+    constructor(method: 'get' | 'post' | 'put' | 'delete', path: string, handler: (c: Context) => unknown, tags: {name: string, description?: string}[], public domain: Domain) {
         this.method = method;
         this.path = path;
         this.handler = handler;
