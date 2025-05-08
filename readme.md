@@ -13,6 +13,7 @@ Un **template Deno REST API minimaliste** conçu pour démarrer rapidement un pr
 ✅ Code propre et typé TypeScript
 ✅ Déploiement automatique via Deno Deploy (GitHub Actions)
 ✅ Gestion simple des environnements `.env`
+✅ **Domain Driven Routing** pour organiser les routes métier
 
 ---
 
@@ -30,7 +31,7 @@ Un **template Deno REST API minimaliste** conçu pour démarrer rapidement un pr
 │   ├── app/
 │   │   └── rest/
 │   │       ├── main.ts        # Entrée principale REST API
-│   │       ├── env.ts         # Gestion des variables d’environnement
+│   │       ├── domains/       # Domaines métiers (routes organisées par logique)
 │   │       └── middlewares/   # Middlewares : auth, sécurité, rate limit
 │   └── ext/
 │       └── deno/              # Utilitaires KV, outils internes
@@ -122,6 +123,18 @@ Les variables sont chargées avec la priorité suivante :
 > * `security-headers.md`
 > * `kv-rate-limiter.md`
 > * `cors.md`
+
+---
+
+## 🏷️ Domain Driven Routing
+
+Le projet adopte une architecture **Domain Driven Routing** :
+✅ Chaque domaine métier est isolé dans son propre dossier sous `src/app/rest/domains`.
+✅ Les routes, schémas et handlers sont encapsulés dans une instance `Domain`.
+✅ Le framework central (`$AppRest`) détecte et branche dynamiquement tous les domaines.
+✅ Les métadonnées OpenAPI sont automatiquement extraites des définitions de domaine.
+
+➡ **Documentation détaillée :** [docs/features/domain-driven-routing.md](docs/features/domain-driven-routing.md)
 
 ---
 

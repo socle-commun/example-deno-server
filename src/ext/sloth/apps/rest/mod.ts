@@ -1,15 +1,17 @@
 import { OpenAPIHono } from 'npm:@hono/zod-openapi';
 import { SwaggerTheme, SwaggerThemeNameEnum } from "npm:swagger-themes";
 import getEnv from '@/ext/deno/env/mod.ts';
-import { bearerAuthMiddleware } from '@/app/rest/middlewares/bearer-auth.ts';
+import { bearerAuthMiddleware } from './middlewares/bearer-auth.ts';
 import { cors } from 'npm:hono/cors';
 import { getProjectVersion } from '@/ext/deno/util/get-project-version.ts'
-import { kvRateLimiter } from '@/app/rest/middlewares/kv-rate-limiter.ts';
+import { kvRateLimiter } from './middlewares/kv-rate-limiter.ts';
 import { defaultOptions } from './default-options.ts'
 import { $AppRestOptions } from './types.ts'
-import { join } from 'https://deno.land/std@0.224.0/path/join.ts'
+import { $Import } from 'https://deno.land/x/sloth_import@1.1.0/mod.ts'
+import { Domain } from '@/ext/sloth/apps/rest/domain-factory.ts'
+import { MiddlewareHandler } from 'https://deno.land/x/hono@v4.3.7/types.ts'
 
-export type $ENV  =
+export type ENV  =
     "APP_NAME" |
     "ENV" |
     "APP_PORT"|
@@ -18,16 +20,16 @@ export type $ENV  =
     "BEARER_TOKEN" |
     "APP_URL" 
 
-export default async function $AppRest(__entryDir: string = join(Deno.cwd(), "src/app/rest"), options: Partial<$AppRestOptions> = defaultOptions) {
+export default async function $AppRest(__entryDir: string, options: Partial<$AppRestOptions> = defaultOptions) {
     //📌 Merge des options par défaut si seulement une partie des options est définie
     const opts: $AppRestOptions = { ...options, ...defaultOptions }
 
     //📌 Chargement des variables d'environnement
-    const docPath = getEnv<$ENV>("DOC_PATH", opts.docPath) as string;
-    const uiPath = getEnv<$ENV>("UI_PATH", opts.uiPath) as string;
-    const appName = getEnv<$ENV>("APP_NAME", opts.appName) as string;
-    const isProd = getEnv<$ENV>("ENV", opts.defaultEnv) === 'production'
-    const appUrl = getEnv<$ENV>("APP_URL") as string;
+    const docPath = getEnv<ENV>("DOC_PATH", opts.docPath) as string;
+    const uiPath = getEnv<ENV>("UI_PATH", opts.uiPath) as string;
+    const appName = getEnv<ENV>("APP_NAME", opts.appName) as string;
+    const isProd = getEnv<ENV>("ENV", opts.defaultEnv) === 'production'
+    const appUrl = getEnv<ENV>("APP_URL") as string;
     const version = await getProjectVersion()
 
     //📌 Afficher un message d'initialisation
@@ -45,15 +47,15 @@ export default async function $AppRest(__entryDir: string = join(Deno.cwd(), "sr
         app.use('*', kvRateLimiter({
             max: 100, // Limite de 100 requêtes par minute
             windowMs: 60 * 1000, // Fenêtre de temps de 1 minute
-        }) as any)
+        }) as (c: unknown, next: unknown) => Promise<void>)
 
-        app.use("*", (await import('./middlewares/security-headers.ts')).default as any)
+        app.use("*", (await import('./middlewares/security-headers.ts')).default as (c: unknown, next: unknown) => Promise<void>)
     }
 
     app.use('*', bearerAuthMiddleware)
 
     app.onError((err, c) => {
-        console.error(err)
+        console.error(err.stack)
 
         return c.json(
             { error: isProd ? 'Internal Server Error' : err.stack },
@@ -61,11 +63,31 @@ export default async function $AppRest(__entryDir: string = join(Deno.cwd(), "sr
         )
     })
 
-    //☄️todo: Intégrer les routes
-    //   Pour chaque dossier dans le dossier "domains"
-    //   Rajoute un tag représentant le domaine / Nom de dossier
-    //   Lance la fonction par défaut du mod pour chargement des routes.
+    // Pour chaque dossier dans le dossier "domains"
+    // Lance la fonction par défaut du mod pour chargement des routes.
+    const domainsPromises: Promise<Domain>[] = []
+    $Import.config.logging = true
+    $Import.config.entryFileName = 'mod.ts'
+    await $Import(__entryDir, ['./domains/'], {
+        callback: (mod: { default: (app: OpenAPIHono) => Promise<Domain>}) => {
+            return new Promise((resolve, reject) => {
+                try {
+                    domainsPromises.push(mod.default(app))
+                    resolve()
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        }
+    });
+    const domains = await Promise.all(domainsPromises)
 
+    domains.forEach((domain: Domain) => {
+        domain.routes.forEach((route) => {
+            // deno-lint-ignore no-explicit-any
+            app.openapi(route.schema, route.handler as any)
+        })
+    })
 
     // ajout du swagger-ui
     const theme = new SwaggerTheme();
@@ -78,9 +100,7 @@ export default async function $AppRest(__entryDir: string = join(Deno.cwd(), "sr
             version,
             title: `${appName} API Docs`,
         },
-        tags: [
-            //☄️todo: Gestion des tags
-        ],
+        tags: domains.map((domain) => domain),
     });
     app.get(uiPath, (c) => {
         return c.html(opts.uiHtmlFactory(themeContent, docPath, appName, version))

@@ -1,3 +1,7 @@
+Voici le fichier **ai.md** mis à jour, incluant la mention claire de la feature **Domain Driven Routing** :
+
+---
+
 # 🧠 ai.md — Contexte IA
 
 Ce projet est un **template Deno REST API** conçu pour être :
@@ -16,19 +20,21 @@ Ce projet est un **template Deno REST API** conçu pour être :
 
   * `@hono/zod-openapi` → génération doc OpenAPI
   * `Deno KV` → rate limiter, stockage léger
+  * **Domain Driven Routing** → architecture modulaire par domaine métier
   * Middlewares maison → auth, sécurité, gestion d’environnement
 
 ---
 
 ## 📂 Structure principale
 
-| Dossier                    | Contenu                                 |
-| -------------------------- | --------------------------------------- |
-| `src/app/rest`             | Entrée API, gestion routes, middlewares |
-| `src/ext/deno`             | Outils internes Deno (KV, utilitaires)  |
-| `tests/e2e`                | Tests end-to-end                        |
-| `.github/workflows`        | Workflows CI/CD GitHub                  |
-| `doc/features` *(à créer)* | Documentation détaillée par feature     |
+| Dossier                | Contenu                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `src/app/rest`         | Entrée API, gestion routes, middlewares, discovery automatique des domaines    |
+| `src/app/rest/domains` | Domaines métiers organisés selon la logique **Domain Driven Routing**          |
+| `src/ext/deno`         | Outils internes Deno (KV, utilitaires)                                         |
+| `tests/e2e`            | Tests end-to-end                                                               |
+| `.github/workflows`    | Workflows CI/CD GitHub                                                         |
+| `doc/features`         | Documentation détaillée par feature, dont `domain-driven-routing.md` (présent) |
 
 ---
 
@@ -46,7 +52,8 @@ Ce projet est un **template Deno REST API** conçu pour être :
 ✅ Le projet expose les métadonnées dans `deno.jsonc` (`version`, etc.)
 ✅ La configuration dynamique est centralisée dans `env.ts`
 ✅ Les middlewares sont typés et organisés proprement
-✅ Les routes sont prévues pour être injectées dynamiquement (tag TODO)
+✅ Les routes sont injectées dynamiquement par découverte des **Domaines** (Domain Driven Routing)
+✅ Chaque domaine retourne un descripteur unifié (`Domain`), garantissant l’extensibilité et la modularité
 
 ---
 
@@ -56,6 +63,7 @@ Ce projet est un **template Deno REST API** conçu pour être :
 * Toute feature nouvelle doit être documentée séparément sous `doc/features/`
 * Les commits suivent une logique simple et claire, sans surcharge
 * Les tests E2E sont prioritaires pour garantir la stabilité
+* Les routes doivent être ajoutées via le système **Domain Driven Routing** pour rester alignées avec l’architecture
 
 ---
 
@@ -63,3 +71,8 @@ Ce projet est un **template Deno REST API** conçu pour être :
 
 > **Ta mission :**
 > Analyser, documenter, améliorer, ou étendre ce projet sans casser ses garanties de sécurité, ses conventions typées, et son architecture modulaire.
+> Tu dois également veiller à maintenir l’intégrité du modèle **Domain Driven Routing** et à respecter les conventions documentées.
+
+---
+
+💬 Si tu veux, je peux aussi générer un fichier complémentaire `ai.md` spécifique pour guider l’IA dans l’ajout de nouveaux domaines métiers ou l’extension des schémas actuels. Dis-moi ! 🚀

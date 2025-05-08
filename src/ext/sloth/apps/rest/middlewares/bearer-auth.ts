@@ -1,9 +1,11 @@
 import { MiddlewareHandler } from 'npm:hono'
-import getEnv, { $ENV } from '@/app/rest/env.ts'
+import getEnv from '@/ext/deno/env/mod.ts'
+
+export type ENV  = 'BEARER_TOKEN'
 
 export const bearerAuthMiddleware: MiddlewareHandler = async (c, next) => {
     const authHeader = c.req.header('authorization')
-    const expectedToken = getEnv($ENV.BEARER_TOKEN)
+    const expectedToken = getEnv<ENV>("BEARER_TOKEN")
 
     if (!expectedToken) {
         console.warn('Server misconfigured: no BEARER_TOKEN set', 500)
