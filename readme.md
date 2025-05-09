@@ -1,188 +1,178 @@
 # 🌐 example-deno-server
 
-Un **template Deno REST API minimaliste** conçu pour démarrer rapidement un projet moderne, typé, sécurisé et extensible.
+A **minimalist Deno REST API template** designed to quickly start a modern, strictly typed, secure, and extensible project.
 
 ---
 
-## 🚀 Pourquoi utiliser ce projet ?
+## 🤖 AI Contact
 
-✅ Serveur REST Deno prêt à l’emploi
-✅ Architecture modulaire, simple à étendre
-✅ Sécurité intégrée (auth, rate limit, headers)
-✅ Documentation OpenAPI/Swagger intégrée
-✅ Code propre et typé TypeScript
-✅ Déploiement automatique via Deno Deploy (GitHub Actions)
-✅ Gestion simple des environnements `.env`
-✅ **Domain Driven Routing** pour organiser les routes métier
+To interact directly with Denono (AI assistant):
+[https://chatgpt.com/share/681dff9a-5b9c-800d-8c0b-9c96a3d0c968](https://chatgpt.com/share/681dff9a-5b9c-800d-8c0b-9c96a3d0c968)
 
 ---
 
-## 🏗️ Structure du projet
+## 🚀 Why use this project?
+
+✅ Ready-to-use Deno REST server
+✅ Modular architecture (Domain Driven Routing)
+✅ Integrated security: Bearer auth, rate limiter, security headers, CORS
+✅ Automated OpenAPI/Swagger documentation
+✅ Clean, strictly typed TypeScript code
+✅ Automatic deployment via Deno Deploy (GitHub Actions)
+✅ Simple environment management with `.env`
+
+---
+
+## 🏗️ Project structure
 
 ```
 .
-├── .github/workflows/         # Workflows CI/CD
-├── deno.jsonc                 # Config Deno (tasks, lint, etc.)
-├── import-map.json            # Mapping des imports
-├── tsconfig.json              # Config TypeScript
-├── readme.md                  # Documentation principale
-├── .env.example               # Exemple d’environnement local
+├── .github/workflows/         # CI/CD workflows
+├── deno.jsonc                 # Deno config (tasks, lint, etc.)
+├── import-map.json            # Import mappings
+├── tsconfig.json              # TypeScript config
+├── readme.md                  # Main documentation
+├── .env.example               # Example local environment
 ├── src/
 │   ├── app/
 │   │   └── rest/
-│   │       ├── main.ts        # Entrée principale REST API
-│   │       ├── domains/       # Domaines métiers (routes organisées par logique)
-│   │       └── middlewares/   # Middlewares : auth, sécurité, rate limit
+│   │       ├── main.ts        # Main REST API entry point
+│   │       ├── domains/       # Business domains (routes organized by logic)
+│   │       └── middlewares/   # Middlewares: auth, security, rate limit
 │   └── ext/
-│       └── deno/              # Utilitaires KV, outils internes
+│       └── deno/              # KV utilities, internal tools
 └── tests/
-    └── e2e/                   # Tests end-to-end
+    └── e2e/                   # End-to-end tests
 ```
 
 ---
 
-## ⚙️ Prérequis
+## ⚙️ Prerequisites
 
-* **Deno ≥ 2.2.8** → [Installer Deno](https://deno.land/manual/getting_started/installation)
-* Git (pour cloner et versionner)
-* **VS Code** recommandé avec l’extension officielle Deno
+* **Deno ≥ 2.2.8** → [Install Deno](https://deno.land/manual/getting_started/installation)
+* Git
+* **VS Code** recommended with the official Deno extension
 
 ---
 
-## 🔨 Mise en route
-
-1️⃣ **Cloner le projet**
+## 🔨 Getting started
 
 ```bash
 git clone git@github.com:socle-commun/example-deno-server.git
 cd example-deno-server
-```
-
-2️⃣ **Configurer l’environnement local**
-
-```bash
 cp .env.example .env
-```
-
-3️⃣ **Lancer le serveur en local**
-
-```bash
 deno task dev
 ```
 
-Accès local → [http://localhost:8000](http://localhost:8000)
+Local access → [http://localhost:8000](http://localhost:8000)
 Swagger UI → [http://localhost:8000/ui](http://localhost:8000/ui)
 OpenAPI JSON → [http://localhost:8000/doc](http://localhost:8000/doc)
 
 ---
 
-## 🛠️ Commandes disponibles
+## 🛠️ Available commands
 
-| Commande                      | Description                              |
-| ----------------------------- | ---------------------------------------- |
-| `deno task dev`               | Lancer l’API REST en local               |
-| `deno task serve`             | Démarrage rapide via `deno serve`        |
-| `deno task test:dev`          | Lancer les tests en mode watch           |
-| `deno task test:dev:coverage` | Générer un rapport de couverture         |
-| `deno task test:ci`           | Exécuter les tests CI avec rapport JUnit |
-| `deno fmt`                    | Formatter le code                        |
-| `deno lint`                   | Vérifier les problèmes de lint           |
-| `deno check`                  | Vérifier les types TypeScript            |
-
----
-
-## 🌱 Gestion de l’environnement
-
-Les variables sont chargées avec la priorité suivante :
-`.env` local → `Deno.env` système → valeur par défaut dans le code
-
-| Variable      | Description                       |
-| ------------- | --------------------------------- |
-| APP\_NAME     | Nom de l’application              |
-| APP\_ENV      | `development` ou `production`     |
-| APP\_PORT     | Port d’écoute                     |
-| APP\_URL      | URL complète pour les CORS        |
-| DOC\_PATH     | Chemin de la doc OpenAPI (`/doc`) |
-| UI\_PATH      | Chemin Swagger UI (`/ui`)         |
-| BEARER\_TOKEN | Token d’authentification global   |
-
-➡ Voir `.env.example` pour un modèle prêt à l’emploi.
+| Command                       | Description                    |
+| ----------------------------- | ------------------------------ |
+| `deno task dev`               | Run the REST API locally       |
+| `deno task serve`             | Quick start via `deno serve`   |
+| `deno task test:dev`          | Run tests in watch mode        |
+| `deno task test:dev:coverage` | Generate coverage report       |
+| `deno task test:ci`           | Run CI tests with JUnit report |
+| `deno fmt`                    | Format the code                |
+| `deno lint`                   | Check for lint issues          |
+| `deno check`                  | Verify TypeScript types        |
 
 ---
 
-## 🔒 Sécurité intégrée
+## 🌱 Environment management
 
-✅ Authentification **Bearer**
-✅ Headers de sécurité (XSS, nosniff, HSTS, etc.)
-✅ Rate limiter via **Deno KV**
-✅ CORS configuré dynamiquement
+| Variable      | Description                   |
+| ------------- | ----------------------------- |
+| APP\_NAME     | Application name              |
+| APP\_ENV      | `development` or `production` |
+| APP\_PORT     | Listening port                |
+| APP\_URL      | Full URL for CORS             |
+| DOC\_PATH     | OpenAPI doc path (`/doc`)     |
+| UI\_PATH      | Swagger UI path (`/ui`)       |
+| BEARER\_TOKEN | Global authentication token   |
 
-> 📂 Tous les middlewares sont documentés séparément sous `docs/features/` :
->
-> * `bearer-auth.md`
-> * `security-headers.md`
-> * `kv-rate-limiter.md`
-> * `cors.md`
+➡ See `.env.example` for a ready-to-use template.
+
+Variables load in order: `.env` → `Deno.env` → hardcoded defaults.
+
+---
+
+## 🔒 Integrated security
+
+✅ **Bearer** authentication (middleware `bearer-auth`)
+✅ Security headers (XSS, nosniff, HSTS, etc.) via `security-headers`
+✅ Rate limiter (100 req/min per IP) via `kv-rate-limiter`
+✅ Dynamic CORS (middleware `cors`)
+
+> Recommended middleware order: auth → headers → CORS → rate limit
+
+📖 See details: [`docs/features/`](docs/features/)
 
 ---
 
 ## 🏷️ Domain Driven Routing
 
-Le projet adopte une architecture **Domain Driven Routing** :
-✅ Chaque domaine métier est isolé dans son propre dossier sous `src/app/rest/domains`.
-✅ Les routes, schémas et handlers sont encapsulés dans une instance `Domain`.
-✅ Le framework central (`$AppRest`) détecte et branche dynamiquement tous les domaines.
-✅ Les métadonnées OpenAPI sont automatiquement extraites des définitions de domaine.
+Each business domain is isolated in `src/app/rest/domains`:
 
-➡ **Documentation détaillée :** [docs/features/domain-driven-routing.md](docs/features/domain-driven-routing.md)
+* Routes, schemas, and handlers encapsulated in a `Domain` instance
+* Auto-discovery and dynamic injection via `$AppRest`
+* OpenAPI metadata automatically extracted
 
----
+![Domain Driven Routing diagram](docs/features/domain-driven-routing.md)
 
-## 📚 Documentation et Swagger UI
-
-La documentation OpenAPI est générée automatiquement grâce à **@hono/zod-openapi**.
-
-* JSON brut → `/doc`
-* Interface interactive (Swagger UI) → `/ui`
+📖 Detailed docs: [`docs/features/domain-driven-routing.md`](docs/features/domain-driven-routing.md)
 
 ---
 
-## 🚀 Déploiement (Deno Deploy)
+## 📚 Documentation and Swagger UI
 
-Un workflow GitHub Actions (`.github/workflows/deploy.yml`) assure :
-✅ Déploiement automatique lors de la publication d’une **release GitHub**
-✅ Mise à jour instantanée sur **Deno Deploy**
+* Raw JSON → `/doc`
+* Swagger UI → `/ui`
 
-➡ Assurez-vous de configurer les secrets et le nom du projet dans votre espace Deno Deploy.
+Automatically generated with **@hono/zod-openapi**.
 
 ---
 
 ## 🧪 Tests
 
-Les tests E2E (`tests/e2e/`) vérifient :
-✅ Les codes de réponse des routes principales
-✅ L’état correct du serveur (start/stop) en local
+* End-to-end tests (`tests/e2e/`) to verify:
+  ✅ Response codes
+  ✅ Server behavior (start/stop)
 
-Exécution des tests :
+Example:
 
 ```bash
 deno task test:dev
 ```
 
+> 📂 Place fixtures and test data under `tests/e2e/fixtures/` (create if needed).
+
+---
+
+## 📝 Conventions to follow
+
+✅ Strict TypeScript typing
+✅ Mandatory documentation for new features under `docs/features/`
+✅ Priority to e2e tests for stability assurance
+✅ Follow security best practices (auth, headers, rate limit, CORS)
+
 ---
 
 ## 🌟 Contributions
 
-✅ Forkez le projet
-✅ Créez une branche pour vos modifications
-✅ Ouvrez une **pull request** détaillée
+✅ Fork the project
+✅ Create a branch for your changes
+✅ Respect conventions (typing, architecture, security) before any PR
+✅ Open a detailed **pull request**
 
 ---
 
-## 🏷️ Licence
+## 🏷️ License
 
 MIT © Socle-Commun
-
----
-
-📂 **Note :** Toute nouvelle feature doit être documentée sous `docs/features/`.
