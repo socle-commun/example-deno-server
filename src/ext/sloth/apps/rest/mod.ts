@@ -9,7 +9,6 @@ import { defaultOptions } from './default-options.ts'
 import { $AppRestOptions } from './types.ts'
 import { $Import } from 'https://deno.land/x/sloth_import@1.1.0/mod.ts'
 import { Domain } from '@/ext/sloth/apps/rest/domain-factory.ts'
-import { MiddlewareHandler } from 'https://deno.land/x/hono@v4.3.7/types.ts'
 
 export type ENV =
     "APP_NAME" |
