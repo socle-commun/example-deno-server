@@ -1,6 +1,6 @@
 import { startTestServer } from './helper.ts'
 
-Deno.test('GET / responds with 404', async () => {
+Deno.test('GET / responds with 200', async () => {
 	const server = await startTestServer()
 
 	try {
@@ -10,8 +10,8 @@ Deno.test('GET / responds with 404', async () => {
 		console.log('Response status:', response.status)
 		console.log('Response body:', body)
 
-		if (response.status !== 404) {
-			throw new Error(`Expected 404, got ${response.status}`)
+		if (response.status !== 200) {
+			throw new Error(`Expected 200, got ${response.status}`)
 		}
 	} finally {
 		await server.stop()

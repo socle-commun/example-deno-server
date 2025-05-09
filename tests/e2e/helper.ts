@@ -5,7 +5,7 @@ export interface TestServer {
 }
 
 export async function startTestServer(
-	cmd: string[] = ['deno', 'serve', '--allow-all', 'src/app/rest/main.ts'],
+	cmd: string[] = ['deno', 'serve', '--allow-all', '--unstable-kv', 'src/app/rest/main.ts'],
 	port = 8000,
 	waitMs = 1500
 ): Promise<TestServer> {

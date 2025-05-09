@@ -1,17 +1,19 @@
 {
   // 🌐 Version du projet
-  "version": "1.0.0",
+  "version": "0.0.0-beta.0",
 
   // 🏁 Point d'entrée principal
   "main": "src/app/rest/main.ts",
 
   // 🚀 Tasks Deno disponibles (via `deno task <name>`)
   "tasks": {
-    "dev": "deno serve --allow-all ./src/app/rest/main.ts",                   // Lancer en mode dev
-    "serve": "deno serve --allow-all ./src/app/rest/main.ts",              // Serveur avec deno serve
-    "test:dev": "deno test --allow-all --watch",                           // Tests avec watch en dev
-    "test:dev:coverage": "deno test --allow-all --coverage && deno coverage", // Tests + couverture en local
-    "test:ci": "deno test --allow-all --reporter=junit --junit-path=./.dist/report.xml --coverage" // CI: tests + rapport JUnit + couverture
+    "docs:dev": "npx vitepress dev docs",
+    "docs:build": "npx vitepress build docs",
+    "dev": "deno serve --unstable-kv --allow-all ./src/app/rest/main.ts",                   // Lancer en mode dev
+    "serve": "deno serve --unstable-kv --allow-all ./src/app/rest/main.ts",              // Serveur avec deno serve
+    "test:dev": "deno test --unstable-kv --allow-all --watch",                           // Tests avec watch en dev
+    "test:dev:coverage": "deno test --unstable-kv --allow-all --coverage && deno coverage", // Tests + couverture en local
+    "test:ci": "deno test --unstable-kv --allow-all --reporter=junit --junit-path=./.dist/report.xml --coverage" // CI: tests + rapport JUnit + couverture
   },
 
   // ⚙️ Options du compilateur TypeScript
@@ -32,7 +34,7 @@
 
   // 🧪 Configuration des tests
   "test": {
-    "include": ["tests/"],                                                 // Inclut le dossier tests
+    "include": ["tests/", "src/**/*.test.ts"],                              // Inclut le dossier tests et les tests dans src
     "exclude": ["src/testdata/", "src/fixtures/**/*.ts"]                   // Ignore les données de test et fixtures
   },
 

@@ -1,82 +1,78 @@
-# 🧠 Contexte IA — Projet Comet ☄️
-
-Ce projet est une **plateforme orientée IA** conçue pour être **analysée, manipulée et modifiée par des intelligences artificielles**.
+Voici le fichier **ai.md** mis à jour, incluant la mention claire de la feature **Domain Driven Routing** :
 
 ---
 
-## 🛰️ Objectif
+# 🧠 ai.md — Contexte IA
 
-Comet automatise l’analyse et la modification de projets TypeScript / JavaScript.  
-Il s’utilise via une **ligne de commande**, une **API dédiée**, et une **intégration GitHub**.
-
-L’analyse génère un fichier standardisé (`cometfile.json`) qui regroupe :
-- l’AST nettoyé
-- les tâches détectées (`☄️todo`, conventions…)
-- les métadonnées du projet
-- la structure des fichiers
+Ce projet est un **template Deno REST API** conçu pour être :
+✅ lisible, analysable et modifiable par une intelligence artificielle
+✅ organisé avec des conventions claires et typées
+✅ accompagné d’une documentation cohérente et d’une architecture modulaire
 
 ---
 
-## 🧩 Architecture
+## 📌 Résumé du projet
 
-Le code source est divisé en quatre blocs :
+* **Nom :** example-deno-server
+* **Type :** REST API avec Deno + Hono
+* **Langage :** TypeScript (strict)
+* **Modules clés :**
 
-| Dossier      | Rôle                                                                 |
-|--------------|----------------------------------------------------------------------|
-| `src/app/`   | Applicatifs CLI ou GitHub                                            |
-| `src/api/`   | API d’analyse, transformation, ou interaction avec IA                |
-| `src/lib/`   | Librairie interne, utilitaires communs                               |
-| `src/ext/`   | Extensions IA ou modules externalisables (par ex. `ext/ai`)          |
-
-> Les outils IA utilisent le module `ext/ai`, structuré pour supporter la génération de prompts, l’appel aux modèles, et le traitement des réponses.
-
----
-
-## 🤖 Interaction avec l’IA
-
-La commande `comet ai` :
-1. Génère un `cometfile.json` via `comet analyze`
-2. Prépare un prompt enrichi avec les métadonnées
-3. Interroge un agent IA via OpenAI (tools/functions)
-4. Reçoit une réponse structurée au format JSON
-5. Applique les actions ou délègue à d’autres IA si nécessaire
+  * `@hono/zod-openapi` → génération doc OpenAPI
+  * `Deno KV` → rate limiter, stockage léger
+  * **Domain Driven Routing** → architecture modulaire par domaine métier
+  * Middlewares maison → auth, sécurité, gestion d’environnement
 
 ---
 
-## 📌 Convention
+## 📂 Structure principale
 
-- Les fichiers `.controller.ts`, `.boundary.ts`, `.types.ts` et `.route.ts` suivent des **conventions fortes** pour faciliter l’analyse.
-- Des **commentaires par emoji** sont utilisés dans le code (`📌`, `☄️todo`, `⚠️`, etc.)
-- Chaque dossier peut contenir un `ai.md` local pour préciser le rôle ou les attentes.
-
----
-
-## 🗂️ Projet auto-descriptif
-
-Le projet **peut s’auto-analyser et se modifier lui-même**.  
-C’est une spécificité centrale de Comet.
-
-L’objectif est de maintenir une boucle IA <-> code **transparente et continue**.
+| Dossier                | Contenu                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `src/app/rest`         | Entrée API, gestion routes, middlewares, discovery automatique des domaines    |
+| `src/app/rest/domains` | Domaines métiers organisés selon la logique **Domain Driven Routing**          |
+| `src/ext/deno`         | Outils internes Deno (KV, utilitaires)                                         |
+| `tests/e2e`            | Tests end-to-end                                                               |
+| `.github/workflows`    | Workflows CI/CD GitHub                                                         |
+| `doc/features`         | Documentation détaillée par feature, dont `domain-driven-routing.md` (présent) |
 
 ---
 
-## 📖 Exemple d’usage IA
+## 🔒 Sécurité
 
-```bash
-comet ai --context src/ext/ai --file lib/OpenAIModel.ts
-```
-
-Ce type de commande permet :
-- d’analyser un fichier avec son contexte
-- de demander une amélioration, un refactor ou une documentation
-- d’obtenir une réponse actionable par JSON ou patch
+* Authentification : **Bearer token** (`BEARER_TOKEN`)
+* Headers : protection XSS, nosniff, frame, HSTS
+* Limitation : **kvRateLimiter** → 100 req/min par IP
+* CORS : restreint selon environnement
 
 ---
 
-## 🧠 Résumé
+## 🔗 Points importants IA
 
-Tu es dans un projet pensé **par et pour les IA**.  
-Chaque fichier, convention ou outil a été conçu pour **te faciliter la tâche**.  
-Ta mission : analyser, comprendre, améliorer.
+✅ Le projet expose les métadonnées dans `deno.jsonc` (`version`, etc.)
+✅ La configuration dynamique est centralisée dans `env.ts`
+✅ Les middlewares sont typés et organisés proprement
+✅ Les routes sont injectées dynamiquement par découverte des **Domaines** (Domain Driven Routing)
+✅ Chaque domaine retourne un descripteur unifié (`Domain`), garantissant l’extensibilité et la modularité
 
 ---
+
+## 🛠️ Conventions et pratiques
+
+* Tous les nouveaux modules doivent être typés (TypeScript strict)
+* Toute feature nouvelle doit être documentée séparément sous `doc/features/`
+* Les commits suivent une logique simple et claire, sans surcharge
+* Les tests E2E sont prioritaires pour garantir la stabilité
+* Les routes doivent être ajoutées via le système **Domain Driven Routing** pour rester alignées avec l’architecture
+
+---
+
+## 🎯 Objectif IA
+
+> **Ta mission :**
+> Analyser, documenter, améliorer, ou étendre ce projet sans casser ses garanties de sécurité, ses conventions typées, et son architecture modulaire.
+> Tu dois également veiller à maintenir l’intégrité du modèle **Domain Driven Routing** et à respecter les conventions documentées.
+
+---
+
+💬 Si tu veux, je peux aussi générer un fichier complémentaire `ai.md` spécifique pour guider l’IA dans l’ajout de nouveaux domaines métiers ou l’extension des schémas actuels. Dis-moi ! 🚀
