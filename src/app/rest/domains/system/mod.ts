@@ -1,7 +1,6 @@
 import { Context } from 'https://deno.land/x/hono@v4.3.7/context.ts'
 import { z } from 'npm:zod'
-import { Domain } from '@/ext/sloth/apps/rest/domain-factory.ts'
-import { getProjectVersion } from '@/ext/deno/util/get-project-version.ts'
+import { Domain } from 'https://deno.land/x/sloth@0.1.0/src/deno/apps/rest/domain.class.ts'
 
 export default () => {
     const domain = new Domain('🛠️ System', import.meta.url)
@@ -13,14 +12,12 @@ export default () => {
 
     // GET /version
     const VersionResponseSchema = z.object({
-        version: z.string().describe('Project version from deno.jsonc'),
         commit: z.string().optional().describe('Current commit SHA if available')
     })
 
     domain.addRoute('get', '/version', async (c: Context) => {
-        const version = await getProjectVersion()
         const commit = Deno.env.get('GIT_COMMIT') || 'unknown'
-        return c.json({ version, commit })
+        return c.json({ commit })
     }).addResponse(200, VersionResponseSchema)
 
     // GET /status

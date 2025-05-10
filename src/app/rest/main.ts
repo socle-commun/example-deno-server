@@ -1,4 +1,4 @@
-import $AppRest from '@/ext/sloth/apps/rest/mod.ts'
+import $AppRest from 'https://deno.land/x/sloth@0.1.0/src/deno/apps/rest/mod.ts'
 
 const { app } = await $AppRest(import.meta.url)
 
