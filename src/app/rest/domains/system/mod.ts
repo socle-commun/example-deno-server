@@ -15,7 +15,7 @@ export default () => {
         commit: z.string().optional().describe('Current commit SHA if available')
     })
 
-    domain.addRoute('get', '/version', async (c: Context) => {
+    domain.addRoute('get', '/version', (c: Context) => {
         const commit = Deno.env.get('GIT_COMMIT') || 'unknown'
         return c.json({ commit })
     }).addResponse(200, VersionResponseSchema)
