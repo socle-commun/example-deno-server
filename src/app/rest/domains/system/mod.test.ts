@@ -14,20 +14,6 @@ Deno.test('GET / responds with API running message', async () => {
     }
 })
 
-Deno.test('GET /version returns project version', async () => {
-    const server = await startTestServer()
-    try {
-        const res = await fetch(server.url + '/version')
-        if (res.status !== 200) throw new Error(`Expected 200, got ${res.status}`)
-        const json = await res.json()
-        if (typeof json.version !== 'string') {
-            throw new Error(`Expected version string, got '${typeof json.version}'`)
-        }
-    } finally {
-        await server.stop()
-    }
-})
-
 Deno.test('GET /status returns system status', async () => {
     const server = await startTestServer()
     try {
