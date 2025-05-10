@@ -1,7 +1,7 @@
-import { Domain } from '@/ext/sloth/apps/rest/domain-factory.ts'
+import { Domain } from 'https://deno.land/x/sloth@0.1.0/src/deno/apps/rest/domain.class.ts'
 import { z } from 'npm:zod'
 import { KeyPathParamsSchema } from '../schemas.ts'
-import { kv } from '@/ext/deno/kv/instance.ts'
+import { kv } from 'https://deno.land/x/sloth@0.1.0/src/deno/utils/kv/instance.ts'
 
 export const PutBodySchema = z.object({
     value: z.unknown().describe('Any JSON-compatible value to store at this key'),
