@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - '**'
+  push:
+    branches:
+      - 'main'
 
 jobs:
   validate:
@@ -26,24 +29,24 @@ jobs:
         run: deno task test:ci
 
       - name: Handle coverage
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/main'
         run: |
-          echo "Uploading coverage for develop branch"
+          echo "Uploading coverage for main branch"
         # Upload coverage reports
       - name: Upload JUnit Test Report
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
           path: ./.dist/report.xml
 
       - name: Upload Coverage Report
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: ./.coverage/
 
       - name: Show coverage summary
-        if: github.ref != 'refs/heads/develop'
+        if: github.ref != 'refs/heads/main'
         run: deno coverage
