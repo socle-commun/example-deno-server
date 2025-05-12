@@ -4,7 +4,7 @@ Deno.test('GET / responds with 200', async () => {
 	const server = await startTestServer()
 
 	try {
-		const response = await fetch(server.url)
+		const response = await fetch(server.url +'/app/')
 		const body = await response.text()
 
 		console.log('Response status:', response.status)

@@ -6,7 +6,7 @@ const testValue = { message: 'hello world' }
 Deno.test('PUT /kv/{keypath} stores a value', async () => {
     const server = await startTestServer()
     try {
-        const res = await fetch(`${server.url}/kv/${testKey}`, {
+        const res = await fetch(`${server.url}/app/kv/${testKey}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ value: testValue })
@@ -24,7 +24,7 @@ Deno.test('PUT /kv/{keypath} stores a value', async () => {
 Deno.test('GET /kv/{keypath} retrieves the stored value', async () => {
     const server = await startTestServer()
     try {
-        const res = await fetch(`${server.url}/kv/${testKey}`)
+        const res = await fetch(`${server.url}/app/kv/${testKey}`)
         if (res.status !== 200) throw new Error(`Expected 200, got ${res.status}`)
         const json = await res.json()
         if (json.message !== 'hello world') {
@@ -38,7 +38,7 @@ Deno.test('GET /kv/{keypath} retrieves the stored value', async () => {
 Deno.test('DELETE /kv/{keypath} removes the key', async () => {
     const server = await startTestServer()
     try {
-        const res = await fetch(`${server.url}/kv/${testKey}`, {
+        const res = await fetch(`${server.url}/app/kv/${testKey}`, {
             method: 'DELETE'
         })
         if (res.status !== 200) throw new Error(`Expected 200, got ${res.status}`)
@@ -54,7 +54,7 @@ Deno.test('DELETE /kv/{keypath} removes the key', async () => {
 Deno.test('GET /kv/{keypath} returns 404 after deletion', async () => {
     const server = await startTestServer()
     try {
-        const res = await fetch(`${server.url}/kv/${testKey}`)
+        const res = await fetch(`${server.url}/app/kv/${testKey}`)
         if (res.status !== 404) throw new Error(`Expected 404, got ${res.status}`)
         const json = await res.json()
         if (json.error !== 'Key not found') {
