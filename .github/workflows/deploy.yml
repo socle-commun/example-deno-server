@@ -29,6 +29,6 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "my_app"
+          project: "example_deno_server"
           entrypoint: "src/app/rest/main.ts"
           root: ""
