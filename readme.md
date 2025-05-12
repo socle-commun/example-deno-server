@@ -9,7 +9,7 @@ Want [More documentation](https://socle-commun.github.io/projects/deno-rest-temp
 ## 🤖 AI Contact
 
 To interact directly with Denono (AI assistant):
-[https://chatgpt.com/share/681dff9a-5b9c-800d-8c0b-9c96a3d0c968](https://chatgpt.com/share/681dff9a-5b9c-800d-8c0b-9c96a3d0c968)
+[https://chatgpt.com/share/681dff9a-5b9c-800d-8c0b-9c96a3d0c968](https://chatgpt.com/g/g-681df8c2c6fc819196c8c7b692c62663-denono)
 
 ---
 
