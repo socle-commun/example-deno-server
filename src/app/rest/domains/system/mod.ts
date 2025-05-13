@@ -1,6 +1,6 @@
 import { Context } from 'https://deno.land/x/hono@v4.3.7/context.ts'
 import { z } from 'npm:zod'
-import { Domain } from 'https://deno.land/x/sloth@0.1.0/src/deno/apps/rest/domain.class.ts'
+import { Domain } from 'https://deno.land/x/sloth@1.0.0/src/deno/apps/rest/domain.class.ts'
 
 export default () => {
     const domain = new Domain('🛠️ System', import.meta.url)
