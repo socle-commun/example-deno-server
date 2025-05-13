@@ -1,7 +1,7 @@
-import { Domain } from 'https://deno.land/x/sloth@0.1.0/src/deno/apps/rest/domain.class.ts'
+import { Domain } from 'https://deno.land/x/sloth@1.0.0/src/deno/apps/rest/domain.class.ts'
 import { z } from 'npm:zod'
 import { KeyPathParamsSchema } from '../schemas.ts'
-import { kv } from 'https://deno.land/x/sloth@0.1.0/src/deno/utils/kv/instance.ts'
+import { kv } from 'https://deno.land/x/sloth@1.0.0/src/deno/utils/kv/instance.ts'
 
 export default (domain: Domain) => {
     domain
