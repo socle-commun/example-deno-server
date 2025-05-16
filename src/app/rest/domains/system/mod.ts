@@ -1,6 +1,7 @@
 import { Context } from 'https://deno.land/x/hono@v4.3.7/context.ts'
 import { z } from 'npm:zod'
 import { Domain } from 'https://deno.land/x/sloth@1.0.0/src/deno/apps/rest/domain.class.ts'
+import healthRoute from './routes/health.ts'
 
 export default () => {
     const domain = new Domain('🛠️ System', import.meta.url)
@@ -38,6 +39,8 @@ export default () => {
         const timestamp = new Date().toISOString()
         return c.json({ uptime, memoryUsage: memory, timestamp })
     }).addResponse(200, StatusResponseSchema)
+
+    healthRoute(domain);
 
     return domain
 }
