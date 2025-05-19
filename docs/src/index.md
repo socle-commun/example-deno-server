@@ -50,7 +50,7 @@ Check out the recommendations for:
 ✅ writing robust tests  
 ✅ adding new routes without breaking the architecture
 
-👉 [View best practices](../../conventions/index.md)
+👉 [View best practices](https://socle-commun.github.io/conventions)
 
 ---
 
