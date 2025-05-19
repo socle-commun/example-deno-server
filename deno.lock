@@ -5,11 +5,14 @@
     "jsr:@hono/hono@^4.6.12": "4.7.5",
     "npm:@hono/swagger-ui@*": "0.5.1_hono@4.7.8",
     "npm:@hono/zod-openapi@*": "0.19.6_hono@4.7.8_zod@3.24.2",
-    "npm:hono-rate-limiter@*": "0.4.2_hono@4.7.8",
+    "npm:@types/node@*": "22.12.0",
+    "npm:esprima-next@*": "6.0.3",
+    "npm:esprima@*": "4.0.1",
     "npm:hono@*": "4.7.8",
+    "npm:recast@*": "0.23.11",
     "npm:swagger-themes@*": "1.4.3",
-    "npm:vitepress@*": "1.6.3_vite@5.4.19_vue@3.5.13_focus-trap@7.6.4",
-    "npm:vitepress@1.6.3": "1.6.3_vite@5.4.19_vue@3.5.13_focus-trap@7.6.4",
+    "npm:vitepress@*": "1.6.3_vite@5.4.19_vue@3.5.13_focus-trap@7.6.4_@types+node@22.12.0",
+    "npm:vitepress@1.6.3": "1.6.3_vite@5.4.19_vue@3.5.13_focus-trap@7.6.4_@types+node@22.12.0",
     "npm:zod@*": "3.24.2"
   },
   "jsr": {
@@ -199,12 +202,6 @@
         "@algolia/autocomplete-preset-algolia",
         "@docsearch/css",
         "algoliasearch"
-      ],
-      "optionalPeers": [
-        "@types/react@>= 16.8.0 < 19.0.0",
-        "react@>= 16.8.0 < 19.0.0",
-        "react-dom@>= 16.8.0 < 19.0.0",
-        "search-insights"
       ]
     },
     "@esbuild/aix-ppc64@0.21.5": {
@@ -539,6 +536,12 @@
     "@types/mdurl@2.0.0": {
       "integrity": "sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg=="
     },
+    "@types/node@22.12.0": {
+      "integrity": "sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
     "@types/unist@3.0.3": {
       "integrity": "sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q=="
     },
@@ -551,7 +554,14 @@
     "@vitejs/plugin-vue@5.2.3_vite@5.4.19_vue@3.5.13": {
       "integrity": "sha512-IYSLEQj4LgZZuoVpdSUCw3dIynTWQgPlaRP6iAvMle4My0HdYwr5g5wQAfwOeHQBmYwEkqF70nRpSilr6PoUDg==",
       "dependencies": [
-        "vite",
+        "vite@5.4.19",
+        "vue"
+      ]
+    },
+    "@vitejs/plugin-vue@5.2.3_vite@5.4.19_vue@3.5.13_@types+node@22.12.0": {
+      "integrity": "sha512-IYSLEQj4LgZZuoVpdSUCw3dIynTWQgPlaRP6iAvMle4My0HdYwr5g5wQAfwOeHQBmYwEkqF70nRpSilr6PoUDg==",
+      "dependencies": [
+        "vite@5.4.19_@types+node@22.12.0",
         "vue"
       ]
     },
@@ -668,18 +678,7 @@
         "vue"
       ],
       "optionalPeers": [
-        "async-validator@^4",
-        "axios@^1",
-        "change-case@^5",
-        "drauu@^0.4",
-        "focus-trap",
-        "fuse.js@^7",
-        "idb-keyval@^6",
-        "jwt-decode@^4",
-        "nprogress@^0.2",
-        "qrcode@^1.5",
-        "sortablejs@^1",
-        "universal-cookie@^7"
+        "focus-trap"
       ]
     },
     "@vueuse/metadata@12.8.2": {
@@ -707,6 +706,12 @@
         "@algolia/requester-browser-xhr",
         "@algolia/requester-fetch",
         "@algolia/requester-node-http"
+      ]
+    },
+    "ast-types@0.16.1": {
+      "integrity": "sha512-6t10qk83GOG8p0vKmaCr8eiilZwO171AvbROMtvvNiwrTly62t+7XkA8RdIIVbpMhCASAsxgAzdRSwh6nw/5Dg==",
+      "dependencies": [
+        "tslib"
       ]
     },
     "birpc@2.3.0": {
@@ -778,6 +783,14 @@
       "scripts": true,
       "bin": true
     },
+    "esprima-next@6.0.3": {
+      "integrity": "sha512-fVfE+9qIOJSbS3AR7roIuL0gCeS+tC86bJV9GlJtwXCRoo67q6tsGGUjThW+JtR5IQSShnHqaDqX8D0IYDfRGA==",
+      "bin": true
+    },
+    "esprima@4.0.1": {
+      "integrity": "sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==",
+      "bin": true
+    },
     "estree-walker@2.0.2": {
       "integrity": "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w=="
     },
@@ -812,12 +825,6 @@
       "integrity": "sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==",
       "dependencies": [
         "@types/hast"
-      ]
-    },
-    "hono-rate-limiter@0.4.2_hono@4.7.8": {
-      "integrity": "sha512-AAtFqgADyrmbDijcRTT/HJfwqfvhalya2Zo+MgfdrMPas3zSMD8SU03cv+ZsYwRU1swv7zgVt0shwN059yzhjw==",
-      "dependencies": [
-        "hono"
       ]
     },
     "hono@4.7.8": {
@@ -923,6 +930,16 @@
     "property-information@7.0.0": {
       "integrity": "sha512-7D/qOz/+Y4X/rzSB6jKxKUsQnphO046ei8qxG59mtM3RG3DHgTK81HrxrmoDVINJb8NKT5ZsRbwHvQ6B68Iyhg=="
     },
+    "recast@0.23.11": {
+      "integrity": "sha512-YTUo+Flmw4ZXiWfQKGcwwc11KnoRAYgzAE2E7mXKCjSviTKShtxBsN6YUUBB2gtaBzKzeKunxhUwNHQuRryhWA==",
+      "dependencies": [
+        "ast-types",
+        "esprima",
+        "source-map",
+        "tiny-invariant",
+        "tslib"
+      ]
+    },
     "regex-recursion@6.0.2": {
       "integrity": "sha512-0YCaSCq2VRIebiaUviZNs0cBz1kg5kVS2UKUfNIx8YVs1cN3AV7NTctO5FOKBA+UT2BPJIWZauYHPqJODG50cg==",
       "dependencies": [
@@ -990,6 +1007,9 @@
     "source-map-js@1.2.1": {
       "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA=="
     },
+    "source-map@0.6.1": {
+      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
+    },
     "space-separated-tokens@2.0.2": {
       "integrity": "sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q=="
     },
@@ -1015,8 +1035,17 @@
     "tabbable@6.2.0": {
       "integrity": "sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew=="
     },
+    "tiny-invariant@1.3.3": {
+      "integrity": "sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg=="
+    },
     "trim-lines@3.0.1": {
       "integrity": "sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg=="
+    },
+    "tslib@2.8.1": {
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
+    },
+    "undici-types@6.20.0": {
+      "integrity": "sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg=="
     },
     "unist-util-is@6.0.0": {
       "integrity": "sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==",
@@ -1075,15 +1104,21 @@
       "optionalDependencies": [
         "fsevents"
       ],
+      "bin": true
+    },
+    "vite@5.4.19_@types+node@22.12.0": {
+      "integrity": "sha512-qO3aKv3HoQC8QKiNSTuUM1l9o/XX3+c+VTgLHbJWHZGeTPVAg2XwazI9UWzoxjIJCGCV2zU60uqMzjeLZuULqA==",
+      "dependencies": [
+        "@types/node",
+        "esbuild",
+        "postcss",
+        "rollup"
+      ],
+      "optionalDependencies": [
+        "fsevents"
+      ],
       "optionalPeers": [
-        "@types/node@^18.0.0 || >=20.0.0",
-        "less@*",
-        "lightningcss@^1.21.0",
-        "sass@*",
-        "sass-embedded@*",
-        "stylus@*",
-        "sugarss@*",
-        "terser@^5.4.0"
+        "@types/node"
       ],
       "bin": true
     },
@@ -1097,7 +1132,7 @@
         "@shikijs/transformers",
         "@shikijs/types",
         "@types/markdown-it",
-        "@vitejs/plugin-vue",
+        "@vitejs/plugin-vue@5.2.3_vite@5.4.19_vue@3.5.13",
         "@vue/devtools-api",
         "@vue/shared",
         "@vueuse/core",
@@ -1106,12 +1141,32 @@
         "mark.js",
         "minisearch",
         "shiki",
-        "vite",
+        "vite@5.4.19",
         "vue"
       ],
-      "optionalPeers": [
-        "markdown-it-mathjax3@^4",
-        "postcss"
+      "bin": true
+    },
+    "vitepress@1.6.3_vite@5.4.19_vue@3.5.13_focus-trap@7.6.4_@types+node@22.12.0": {
+      "integrity": "sha512-fCkfdOk8yRZT8GD9BFqusW3+GggWYZ/rYncOfmgcDtP3ualNHCAg+Robxp2/6xfH1WwPHtGpPwv7mbA3qomtBw==",
+      "dependencies": [
+        "@docsearch/css",
+        "@docsearch/js",
+        "@iconify-json/simple-icons",
+        "@shikijs/core",
+        "@shikijs/transformers",
+        "@shikijs/types",
+        "@types/markdown-it",
+        "@vitejs/plugin-vue@5.2.3_vite@5.4.19_vue@3.5.13_@types+node@22.12.0",
+        "@vue/devtools-api",
+        "@vue/shared",
+        "@vueuse/core",
+        "@vueuse/integrations",
+        "focus-trap",
+        "mark.js",
+        "minisearch",
+        "shiki",
+        "vite@5.4.19_@types+node@22.12.0",
+        "vue"
       ],
       "bin": true
     },
@@ -1123,9 +1178,6 @@
         "@vue/runtime-dom",
         "@vue/server-renderer",
         "@vue/shared"
-      ],
-      "optionalPeers": [
-        "typescript@*"
       ]
     },
     "yaml@2.7.1": {
@@ -1140,9 +1192,18 @@
     }
   },
   "redirects": {
-    "https://deno.land/x/bcrypt/mod.ts": "https://deno.land/x/bcrypt@v0.4.1/mod.ts"
+    "https://deno.land/x/bcrypt/mod.ts": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
+    "https://esm.sh/@babel/parser?target=denonext": "https://esm.sh/@babel/parser@7.26.10?target=denonext",
+    "https://esm.sh/@types/babylon@~6.16.9/index.d.ts": "https://esm.sh/@types/babylon@6.16.9/index.d.ts",
+    "https://esm.sh/ast-types@^0.16.1?target=denonext": "https://esm.sh/ast-types@0.16.1?target=denonext",
+    "https://esm.sh/babylon?target=denonext": "https://esm.sh/babylon@6.18.0?target=denonext",
+    "https://esm.sh/source-map@~0.6.1?target=denonext": "https://esm.sh/source-map@0.6.1?target=denonext",
+    "https://esm.sh/tiny-invariant@^1.3.3?target=denonext": "https://esm.sh/tiny-invariant@1.3.3?target=denonext",
+    "https://esm.sh/tslib@^2.0.1?target=denonext": "https://esm.sh/tslib@2.8.1?target=denonext"
   },
   "remote": {
+    "https://cdn.skypack.dev/-/jsonc-parser@v3.3.1-sN7DxPLO6y5jH4u7oHq7/dist=es2019,mode=imports/optimized/jsonc-parser.js": "93f1b2d3d2073fefbd66232084f33862775545722d55ca4656c590d0eb084afb",
+    "https://cdn.skypack.dev/jsonc-parser": "dfeca6c61cf4d7e2a3525a85216329e694b522d650e4c6fcf621679608bb2a2d",
     "https://deno.land/std@0.224.0/assert/assert.ts": "09d30564c09de846855b7b071e62b5974b001bb72a4b797958fe0660e7849834",
     "https://deno.land/std@0.224.0/assert/assertion_error.ts": "ba8752bd27ebc51f723702fac2f54d3e94447598f54264a6653d6413738a8917",
     "https://deno.land/std@0.224.0/bytes/concat.ts": "86161274b5546a02bdb3154652418efe7af8c9310e8d54107a68aaa148e0f5ed",
@@ -1357,15 +1418,20 @@
     "https://deno.land/x/sloth_import@1.2.0/processes/import-file/main.ts": "16ca21d1ae40effd26aa774fa8576ecc00b2c4b2e88a478f268870a50ae866ef",
     "https://deno.land/x/sloth_import@1.2.0/processes/log/main.ts": "29d3bef7c04f33ed8b7765f6d70df0d795fc77bb0c01f71f78efebd87f3edcd9",
     "https://deno.land/x/sloth_import@1.2.0/processes/resolve-path/main.ts": "b7f2067ad90fd6415a8a459b168b92723bce6c55614262e052aba14547aef1a7",
-    "https://deno.land/x/sloth_import@1.2.0/types.ts": "a1b207e432764e93d6abb40ed364e2a362c3894aa185d3a325878920db23e526"
-  },
-  "workspace": {
-    "dependencies": [
-      "npm:@hono/swagger-ui@*",
-      "npm:@hono/zod-openapi@*",
-      "npm:hono@*",
-      "npm:swagger-themes@*",
-      "npm:zod@*"
-    ]
+    "https://deno.land/x/sloth_import@1.2.0/types.ts": "a1b207e432764e93d6abb40ed364e2a362c3894aa185d3a325878920db23e526",
+    "https://esm.sh/@babel/parser@7.26.10/denonext/parser.mjs": "3490c3ea5dbf3b5b26e6cd0616f1f249e5de6ea8d658a6c940b0de689d1200a8",
+    "https://esm.sh/@babel/parser@7.26.10?target=denonext": "27e3b2d45bd14d621d22a9161268f42696fbf298459f7892a195abd61753fb41",
+    "https://esm.sh/ast-types@0.16.1/denonext/ast-types.mjs": "76fa1c6735acdabfa408ef00022e439b8668a5674ec1de6e6625c789ae529625",
+    "https://esm.sh/ast-types@0.16.1?target=denonext": "0334b8baed476f97dacccd9841fe9bb60fcab7a90e22f801d634bf8223f20bf7",
+    "https://esm.sh/babylon@6.18.0/denonext/babylon.mjs": "6dde8a8d7941cbc8c67a1fdf2b51cbbca6dcbfd3ad2f60794df2a492534aaa4a",
+    "https://esm.sh/babylon@6.18.0?target=denonext": "c04127418e01b207459b7015084097f08ea02cb53dfd5149d546db291eec3189",
+    "https://esm.sh/recast@0.23.11/denonext/parsers/typescript.mjs": "a4541a2c4594195a7c48b759db9644e81cb5c3d1f4a156084d654f641f5201d8",
+    "https://esm.sh/recast@0.23.11/parsers/typescript.js": "b45629eb7eae01251be66090e209bce884d172bf63c0d99bee9c22d5a89f3c71",
+    "https://esm.sh/source-map@0.6.1/denonext/source-map.mjs": "ed3f2cf0c5f9561924c9b923ea8ffc24709ae31f1a90dd6c67be04c99598f626",
+    "https://esm.sh/source-map@0.6.1?target=denonext": "3803db0ea481a551d1b0f98b57c3b32597fe2c03a5204fbec3aa58d1892f5fa0",
+    "https://esm.sh/tiny-invariant@1.3.3/denonext/tiny-invariant.mjs": "6ff7fd731691fb0e6485756b3ce4d56d044b7b9b815eca5b9409f147fff6a90e",
+    "https://esm.sh/tiny-invariant@1.3.3?target=denonext": "38b332e1d94c6bbae21cfe8484c0545099d34ac3f2dba1233ca60183e2087609",
+    "https://esm.sh/tslib@2.8.1/denonext/tslib.mjs": "ebce3cd5facb654623020337f867b426ba95f71596ba87acc9e6c6f4e55905ca",
+    "https://esm.sh/tslib@2.8.1?target=denonext": "a89cbf082a0ad54e87ea85d75e6d5492b3e2ff0c5de9e3e478206a015b3f3992"
   }
 }

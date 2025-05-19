@@ -1,8 +1,8 @@
-import { getProjectVersion } from '../../lib/utils/get-project-version.ts'
-import kvRateLimiter from '../../lib/utils/middlewares/kv-rate-limiter.ts'
-import { bearerAuthMiddleware } from '../../lib/utils/middlewares/bearer-auth.ts'
-import securityHeadersMiddleware from '../../lib/utils/middlewares/security-headers.ts'
-import { SwaggerUI, SwaggerTheme, SwaggerThemeNameEnum, cors, OpenAPIHono, getEnv } from '../../ext/imports.ts'
+import { getProjectVersion } from '@/lib/utils/get-project-version.ts'
+import kvRateLimiter from '@/lib/utils/middlewares/kv-rate-limiter.ts'
+import { bearerAuthMiddleware } from '@/lib/utils/middlewares/bearer-auth.ts'
+import securityHeadersMiddleware from '@/lib/utils/middlewares/security-headers.ts'
+import { SwaggerUI, SwaggerTheme, SwaggerThemeNameEnum, cors, OpenAPIHono, getEnv } from '@/ext/deps.ts'
 import kvDomain from './domains/kv/mod.ts';
 import systemDomain from './domains/system/mod.ts';
 

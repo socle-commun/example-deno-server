@@ -1,5 +1,5 @@
 
-import { z } from '../../../../ext/imports.ts'
+import { z } from '@/ext/deps.ts'
 
 export const KeyPathParamsSchema = z.object({
     keypath: z.string().describe('Key path, e.g., "path.of.resource"')

@@ -1,5 +1,5 @@
 
-import { Domain, Context, z } from '../../../../ext/imports.ts'
+import { Domain, Context, z } from '@/ext/deps.ts'
 import healthRoute from './routes/health.ts'
 
 export default () => {

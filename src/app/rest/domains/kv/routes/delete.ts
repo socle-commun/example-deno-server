@@ -1,5 +1,5 @@
 
-import { Domain, kv, z } from '../../../../../ext/imports.ts'
+import { Domain, kv, z } from '@/ext/deps.ts'
 import { KeyPathParamsSchema } from '../schemas.ts'
 
 export default (domain: Domain) => {

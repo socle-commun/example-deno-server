@@ -1,5 +1,5 @@
-import { parse } from "https://deno.land/std@0.224.0/jsonc/mod.ts";
-import { join } from "https://deno.land/std@0.224.0/path/mod.ts";
+import { join, parse } from '@/ext/deps.ts'
+
 
 export async function getProjectVersion(path: string = Deno.cwd()): Promise<string> {
   const filePath = join(path, 'deno.jsonc')

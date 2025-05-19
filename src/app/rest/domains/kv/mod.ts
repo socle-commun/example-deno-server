@@ -1,5 +1,5 @@
 
-import { Domain } from '../../../../ext/imports.ts'
+import { Domain } from '@/ext/deps.ts'
 import deleteRoute from './routes/delete.ts'
 import getRoute from './routes/get.ts'
 import setRoute from './routes/set.ts'

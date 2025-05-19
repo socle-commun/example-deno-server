@@ -1,5 +1,5 @@
 
-import { Domain, Context, z } from '../../../../../ext/imports.ts'
+import { Domain, Context, z } from '@/ext/deps.ts'
 
 export default (domain: Domain) => {
     const HealthResponseSchema = z.object({
