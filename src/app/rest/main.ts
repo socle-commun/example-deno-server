@@ -45,7 +45,7 @@ if (isProd) {
     app.use("*", securityHeadersMiddleware as (c: unknown, next: unknown) => Promise<void>)
 }
 
-app.use(baseUrl, bearerAuthMiddleware as (c: unknown, next: unknown) => Promise<void>)
+app.use(baseUrl + '/*', bearerAuthMiddleware as (c: unknown, next: unknown) => Promise<void>)
 
 app.onError((err, c) => {
     console.error(err.stack)
