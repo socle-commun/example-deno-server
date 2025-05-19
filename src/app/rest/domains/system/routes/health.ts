@@ -1,6 +1,5 @@
-import { z } from 'npm:zod'
-import { Domain } from 'https://deno.land/x/sloth@1.0.0/src/deno/apps/rest/domain.class.ts'
-import { Context } from 'https://deno.land/x/hono@v4.3.7/context.ts'
+
+import { Domain, Context, z } from '@/ext/deps.ts'
 
 export default (domain: Domain) => {
     const HealthResponseSchema = z.object({

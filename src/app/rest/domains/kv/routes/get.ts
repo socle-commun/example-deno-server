@@ -1,7 +1,6 @@
-import { Domain } from 'https://deno.land/x/sloth@1.0.0/src/deno/apps/rest/domain.class.ts'
-import { z } from 'npm:zod'
+
+import { Domain, kv, z } from '@/ext/deps.ts'
 import { KeyPathParamsSchema } from '../schemas.ts'
-import { kv } from 'https://deno.land/x/sloth@1.0.0/src/deno/utils/kv/instance.ts'
 
 export const ListQuerySchema = z.object({
     list: z.string().optional().describe('If set to true, lists all keys under the keypath prefix')
