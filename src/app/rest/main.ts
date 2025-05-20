@@ -45,7 +45,12 @@ if (isProd) {
     app.use("*", securityHeadersMiddleware as (c: unknown, next: unknown) => Promise<void>)
 }
 
-app.use(baseUrl, bearerAuthMiddleware as (c: unknown, next: unknown) => Promise<void>)
+app.use(baseUrl + '/*', bearerAuthMiddleware as (c: unknown, next: unknown) => Promise<void>)
+
+app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
+  type: 'http',
+  scheme: 'bearer',
+})
 
 app.onError((err, c) => {
     console.error(err.stack)
@@ -65,6 +70,11 @@ domains.forEach((domain) => {
     domain.routes.forEach((route) => {
         console.log(`📜 [${route.domain.name}] ${route.method.toUpperCase()} (${route.path})`)
         route.path = baseUrl + route.path;
+        
+        if (!route.schema.security /* todo && !route.insecure */) {
+            route.schema.security = [{ bearerAuth: [] }];
+        }
+
         // deno-lint-ignore no-explicit-any
         app.openapi(route.schema, route.handler as any)
     })
@@ -81,6 +91,7 @@ app.doc(docPath, {
         version,
         title: `${appName} API Docs`,
     },
+    security: [{ bearerAuth: [] }],
     tags: domains.map((domain) => ({ name: domain.name })),
 });
 app.get(uiPath, (c) => {
