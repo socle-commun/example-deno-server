@@ -157,6 +157,102 @@ deno task test:dev
 
 ---
 
+## 🔄 How to update from the original template
+
+If your project was created from the [`example-deno-server`](https://github.com/socle-commun/example-deno-server) template and you'd like to pull in the latest improvements, follow one of the safe update strategies below.
+
+---
+
+### 🧭 1. Add the upstream template (only once)
+
+```bash
+git remote add upstream https://github.com/socle-commun/example-deno-server.git
+```
+
+---
+
+### ✅ Option A – Rebase locally and merge cleanly
+
+1. **Fetch the latest changes from the template**:
+
+   ```bash
+   git fetch upstream
+   ```
+
+2. **Create a new branch from your current `main`**:
+
+   ```bash
+   git checkout -b update-from-template
+   ```
+
+3. **Rebase your changes onto the template's latest `main`**:
+
+   ```bash
+   git rebase upstream/main
+   ```
+
+4. **Resolve conflicts if needed**, then:
+
+   ```bash
+   git rebase --continue
+   ```
+
+5. **Test everything locally** to make sure nothing breaks.
+
+6. **Merge back into your local `main`** (optionally with `--no-ff` to keep traceability):
+
+   ```bash
+   git checkout main
+   git merge update-from-template --no-ff
+   ```
+
+7. **Push**:
+
+   ```bash
+   git push
+   ```
+
+---
+
+### 🧪 Option B – Use a temporary integration branch
+
+If you want to test the template’s changes before mixing them with your code:
+
+```bash
+git fetch upstream
+git checkout -b template-update upstream/main
+```
+
+You can now compare, cherry-pick, or manually integrate changes in your working branch.
+
+---
+
+### 💡 Option C – Manual diff and cherry-pick
+
+To manually inspect changes:
+
+```bash
+git fetch upstream
+git diff upstream/main
+```
+
+Then pick only what you want (files, commits, etc.) using:
+
+```bash
+git cherry-pick <commit>
+```
+
+---
+
+### 📌 Best Practices
+
+* Never force-push to `main`.
+* Use feature branches or integration branches.
+* Test thoroughly before merging.
+* Consider using a PR to review changes even in solo projects.
+
+---
+
 ## 📝 Conventions to follow
 
 ✅ Strict TypeScript typing  
