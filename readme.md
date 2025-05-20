@@ -2,7 +2,7 @@
 
 A **minimalist Deno REST API template** designed to quickly start a modern, strictly typed, secure, and extensible project.
 
-Want [More documentation](https://socle-commun.github.io/projects/deno-rest-template/) ?
+Want [More documentation](https://socle-commun.github.io/example-deno-server) ?
 
 ---
 

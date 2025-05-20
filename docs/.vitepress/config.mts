@@ -5,6 +5,21 @@ import withMagic from './with-magic';
 export default withMagic(defineConfig({
   title: "example-deno-server",
   srcDir: "./src",
+  base: "/example-deno-server/",
+  cleanUrls: true,
+  sitemap: {
+    hostname: "https://socle-commun.github.io/example-deno-server"
+  },
+  themeConfig: {
+    // https://vitepress.dev/reference/default-theme-config
+    logo: {
+      light: "/logo-light.svg",
+      dark: "/logo-dark.svg"
+    },
+    socialLinks: [
+      { icon: "github", link: "https://github.com/socle-commun/example-deno-server" }
+    ]
+  },
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     [
